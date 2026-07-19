@@ -9,3 +9,4 @@ ta
 yfinance
 plotly
 matplotlib
+gunicorn
