@@ -112,32 +112,39 @@ Algorithmic-Trading-Platform
 
 ---
 
-# 📸 Screenshots
+## 🔐 Login
 
-### Login
-*(Add screenshot here)*
-
----
-
-### Dashboard
-*(Add screenshot here)*
+![Login](screenshots/login.png)
 
 ---
 
-### AI Signal Prediction
-*(Add screenshot here)*
+## 📊 Dashboard
+
+![Dashboard](screenshots/dashboard.png)
 
 ---
 
-### Paper Trading
-*(Add screenshot here)*
+## 📈 Market
+
+![Market](screenshots/market.png)
 
 ---
 
-### Backtesting
-*(Add screenshot here)*
+## 🤖 AI Signals
+
+![Signals](screenshots/signals.png)
 
 ---
+
+## 💹 Paper Trading
+
+![Paper Trading](screenshots/paper_trading.png)
+
+---
+
+## 📉 Backtesting
+
+![Backtesting](screenshots/backtesting.png)
 
 # ⚡ Installation
 
