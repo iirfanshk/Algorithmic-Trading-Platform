@@ -120,7 +120,7 @@ Algorithmic-Trading-Platform
 
 ## 📊 Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/Dashboard.png)
 
 ---
 
