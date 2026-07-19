@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="topbar">
+
+    <h1>💹 Paper Trading</h1>
+
+    <p>Practice trading with virtual money using live market prices.</p>
+
+</div>
+
+<!-- Analytics Cards -->
+
+<div class="cards">
+
+    <div class="card">
+        <h3>Cash</h3>
+        <h2 id="cash">$0</h2>
+    </div>
+
+    <div class="card">
+        <h3>Portfolio Value</h3>
+        <h2 id="portfolioValue">$0</h2>
+    </div>
+
+    <div class="card">
+        <h3>Unrealized P&amp;L</h3>
+        <h2 id="pnl">$0</h2>
+    </div>
+
+    <div class="card">
+        <h3>Total Return</h3>
+        <h2 id="returnPct">0%</h2>
+    </div>
+
+</div>
+
+<br>
+
+<!-- Buy / Sell -->
+
+<div class="cards">
+
+    <div class="card">
+
+        <label>Asset</label>
+
+        <select id="asset">
+
+            <option>AAPL</option>
+            <option>MSFT</option>
+            <option>NVDA</option>
+            <option>GOOGL</option>
+            <option>META</option>
+            <option>AMZN</option>
+            <option>TSLA</option>
+
+            <option>BTC-USD</option>
+            <option>ETH-USD</option>
+            <option>SOL-USD</option>
+            <option>BNB-USD</option>
+            <option>XRP-USD</option>
+
+        </select>
+
+    </div>
+
+    <div class="card">
+
+        <label>Quantity</label>
+
+        <input
+            type="number"
+            id="quantity"
+            value="1"
+            min="1"
+        >
+
+    </div>
+
+</div>
+
+<br>
+
+<button id="buyBtn" class="primary-btn">
+    🟢 Buy
+</button>
+
+&nbsp;
+
+<button id="sellBtn" class="primary-btn">
+    🔴 Sell
+</button>
+
+<br><br>
+
+<!-- Open Positions -->
+
+<div class="card">
+
+    <h2>📂 Open Positions</h2>
+
+    <br>
+
+    <div id="portfolio">
+
+        Loading...
+
+    </div>
+
+</div>
+
+<br>
+
+<!-- Portfolio Allocation -->
+
+<div class="card">
+
+    <h2>🥧 Portfolio Allocation</h2>
+
+    <br>
+
+    <div style="width:100%;height:450px;">
+
+        {% if allocation_chart %}
+
+            {{ allocation_chart|safe }}
+
+        {% else %}
+
+            <p>No holdings available.</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<br>
+
+<!-- Trade History -->
+
+<div class="card">
+
+    <h2>📜 Trade History</h2>
+
+    <br>
+
+    <div id="historyTable">
+
+        No Trades Yet
+
+    </div>
+
+</div>
+
+<script src="/js/paper.js"></script>
+
+{% endblock %}

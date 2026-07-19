@@ -1,0 +1,253 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Arial,sans-serif;
+}
+
+body{
+
+    background:#0f1117;
+
+    background-image:url("../assets/login_bg.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+.container{
+
+    width:1200px;
+    height:700px;
+
+    display:flex;
+
+    backdrop-filter:blur(20px);
+
+    background:rgba(15,17,23,.72);
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+
+}
+
+.left{
+
+    flex:1;
+
+    padding:70px;
+
+    color:white;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
+}
+
+.left h1{
+
+    font-size:54px;
+
+    margin-bottom:20px;
+
+    font-weight:700;
+
+}
+
+.left p{
+
+    color:#b8c1cc;
+
+    font-size:18px;
+
+    line-height:1.8;
+
+    margin-bottom:50px;
+
+}
+
+.feature{
+
+    margin-bottom:28px;
+
+    font-size:18px;
+
+    color:white;
+
+}
+
+.right{
+
+    width:430px;
+
+    background: lightgray;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.card{
+
+    width:340px;
+
+}
+
+.card h2{
+
+    font-size:34px;
+
+    color:#111827;
+
+    margin-bottom:8px;
+
+}
+
+.subtitle{
+
+    color:#6b7280;
+
+    margin-bottom:35px;
+
+}
+
+.google-btn{
+
+    width:100%;
+
+    height:52px;
+
+    border:1px solid #d1d5db;
+
+    background:white;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    margin-bottom:28px;
+
+}
+
+.divider{
+
+    display:flex;
+
+    align-items:center;
+
+    margin:28px 0;
+
+}
+
+.divider::before,
+.divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:#ddd;
+
+}
+
+.divider span{
+
+    margin:0 12px;
+
+    color:#888;
+
+    font-size:14px;
+
+}
+
+input{
+
+    width:100%;
+
+    height:52px;
+
+    padding:0 18px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    margin-bottom:18px;
+
+    font-size:15px;
+
+}
+
+input:focus{
+
+    outline:none;
+
+    border:1px solid #2563eb;
+
+}
+
+.login-btn{
+
+    width:100%;
+
+    height:54px;
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.login-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.bottom{
+
+    margin-top:25px;
+
+    text-align:center;
+
+    color:#666;
+
+}
+
+.bottom a{
+
+    color:#2563eb;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}

@@ -1,0 +1,11 @@
+streamlit
+flask
+bcrypt
+pandas
+numpy
+scikit-learn
+xgboost
+ta
+yfinance
+plotly
+matplotlib

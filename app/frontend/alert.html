@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="topbar">
+    <h1>🔔 AI Price Alerts</h1>
+    <p>Create price alerts for any supported asset.</p>
+</div>
+
+<div class="card">
+
+    <label>Asset Class</label>
+
+    <select id="asset_class">
+
+        {% for cls in asset_classes %}
+
+        <option value="{{ cls }}"
+            {% if cls == selected_asset_class %}selected{% endif %}>
+
+            {{ cls }}
+
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <label>Asset</label>
+
+    <select id="asset">
+
+        {% for item in assets %}
+
+        <option value="{{ item }}">
+
+            {{ item }}
+
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <label>Condition</label>
+
+    <select id="condition">
+
+        <option value="Above">Above</option>
+
+        <option value="Below">Below</option>
+
+    </select>
+
+    <br><br>
+
+    <label>Target Price</label>
+
+    <input
+        type="number"
+        id="targetPrice"
+        placeholder="Enter target price"
+    >
+
+    <br><br>
+
+    <button
+        id="checkAlertBtn"
+        class="primary-btn">
+
+        🔔 Check Alert
+
+    </button>
+
+</div>
+
+<br>
+
+<div class="card">
+
+    <h2>Result</h2>
+
+    <br>
+
+    <div id="alertResult">
+
+        No alert checked.
+
+    </div>
+
+</div>
+
+<script src="/js/alerts.js"></script>
+
+{% endblock %}

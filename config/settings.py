@@ -1,0 +1,15 @@
+# config/settings.py
+
+INITIAL_CAPITAL = 100000
+
+TRANSACTION_COST = 0.001      # 0.1%
+
+RISK_PER_TRADE = 0.02          # 2%
+
+MAX_OPEN_POSITIONS = 5
+
+START_DATE = "2024-01-01"
+
+END_DATE = None
+
+BENCHMARK = "SPY"

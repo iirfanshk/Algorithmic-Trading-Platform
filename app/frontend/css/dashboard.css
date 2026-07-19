@@ -1,0 +1,610 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,sans-serif;
+}
+
+/* ==========================================
+   THEME VARIABLES
+========================================== */
+
+.dark-theme{
+
+    --bg:#0f172a;
+    --text:#ffffff;
+    --sidebar:#111827;
+    --card:#1e293b;
+    --input:#0f172a;
+    --border:#334155;
+    --muted:#94a3b8;
+    --hover:#253248;
+    --button:#2563eb;
+    --buttonHover:#1d4ed8;
+
+}
+
+.light-theme{
+
+    --bg:#f8fafc;
+    --text:#0f172a;
+    --sidebar:#ffffff;
+    --card:#ffffff;
+    --input:#ffffff;
+    --border:#d1d5db;
+    --muted:#475569;
+    --hover:#f1f5f9;
+    --button:#2563eb;
+    --buttonHover:#1d4ed8;
+
+}
+
+/* ==========================================
+   BODY
+========================================== */
+
+body{
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    display:flex;
+
+    transition:.3s ease;
+
+}
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+
+.sidebar{
+
+    width:240px;
+
+    height:100vh;
+
+    background:var(--sidebar);
+
+    padding:28px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    transition:.3s;
+
+    border-right:1px solid var(--border);
+
+}
+
+.logo{
+
+    font-size:30px;
+
+    font-weight:700;
+
+    margin-bottom:40px;
+
+    color:var(--text);
+
+}
+
+.sidebar a{
+
+    color:var(--muted);
+
+    text-decoration:none;
+
+    padding:14px 0;
+
+    transition:.25s;
+
+    border-radius:8px;
+
+}
+
+.sidebar a:hover{
+
+    color:var(--text);
+
+    padding-left:10px;
+
+}
+
+/* ==========================================
+   MAIN
+========================================== */
+
+.main{
+
+    margin-left:240px;
+
+    width:calc(100% - 240px);
+
+    padding:35px;
+
+}
+
+.topbar{
+
+    margin-bottom:25px;
+
+}
+
+.topbar h1{
+
+    font-size:34px;
+
+    color:var(--text);
+
+}
+
+/* ==========================================
+   CARDS
+========================================== */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+
+    gap:20px;
+
+}
+
+.card{
+
+    background:var(--card);
+
+    border-radius:16px;
+
+    padding:22px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+
+    transition:.3s;
+
+}
+
+.card h1,
+.card h2{
+
+    color:var(--text);
+
+}
+
+.card h3{
+
+    color:var(--muted);
+
+    margin-bottom:10px;
+
+    font-size:15px;
+
+}
+
+/* ==========================================
+   FORM
+========================================== */
+
+label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+}
+
+input,
+select{
+
+    width:100%;
+
+    height:45px;
+
+    border:none;
+
+    outline:none;
+
+    background:var(--input);
+
+    color:var(--text);
+
+    border-radius:10px;
+
+    padding:0 15px;
+
+    font-size:15px;
+
+    border:1px solid var(--border);
+
+    transition:.3s;
+
+}
+
+input:focus,
+select:focus{
+
+    border-color:#3b82f6;
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+button,
+.primary-btn{
+
+    background:var(--button);
+
+    color:white;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:10px;
+
+    padding:13px 28px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+button:hover,
+.primary-btn:hover{
+
+    background:var(--buttonHover);
+
+    transform:translateY(-2px);
+
+}
+
+button:disabled,
+.primary-btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+/* ==========================================
+   TABLES
+========================================== */
+
+.table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:15px;
+
+}
+
+.table th{
+
+    text-align:left;
+
+    color:var(--muted);
+
+    padding:15px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.table td{
+
+    padding:15px;
+
+    border-bottom:1px solid var(--border);
+
+    color:var(--text);
+
+}
+
+.table tr:hover{
+
+    background:var(--hover);
+
+}
+
+/* ==========================================
+   CHART
+========================================== */
+
+.chart{
+
+    margin-top:30px;
+
+    background:var(--card);
+
+    border-radius:18px;
+
+    height:450px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:var(--muted);
+
+    font-size:22px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+
+}
+
+canvas{
+
+    max-width:100%;
+
+}
+
+/* ==========================================
+   METRIC COLORS
+========================================== */
+
+.positive{
+
+    color:#22c55e !important;
+
+}
+
+.negative{
+
+    color:#ef4444 !important;
+
+}
+
+.info{
+
+    color:#3b82f6 !important;
+
+}
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:var(--bg);
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#64748b;
+
+    border-radius:10px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#475569;
+
+}
+
+/* ==========================================
+   SMOOTH TRANSITIONS
+========================================== */
+
+body,
+.sidebar,
+.card,
+input,
+select,
+.table tr,
+.chart{
+
+    transition:all .25s ease;
+
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:900px){
+
+    .sidebar{
+
+        width:80px;
+
+        padding:20px 10px;
+
+    }
+
+    .sidebar .logo{
+
+        font-size:18px;
+
+        text-align:center;
+
+    }
+
+    .sidebar a{
+
+        font-size:12px;
+
+        text-align:center;
+
+    }
+
+    .main{
+
+        margin-left:80px;
+
+        width:calc(100% - 80px);
+
+        padding:20px;
+
+    }
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+/* ==========================================
+   LOADING SPINNER
+========================================== */
+
+.loading-overlay{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(15,23,42,.75);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-direction:column;
+
+    z-index:9999;
+
+}
+
+.loading-overlay p{
+
+    color:white;
+
+    margin-top:20px;
+
+    font-size:18px;
+
+}
+
+.spinner{
+
+    width:60px;
+
+    height:60px;
+
+    border:6px solid rgba(255,255,255,.25);
+
+    border-top:6px solid #3b82f6;
+
+    border-radius:50%;
+
+    animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+    100%{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+/* ==========================================
+   TOAST
+========================================== */
+
+.toast{
+
+    position:fixed;
+
+    top:25px;
+
+    right:25px;
+
+    background:#22c55e;
+
+    color:white;
+
+    padding:14px 22px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+    opacity:0;
+
+    transform:translateY(-20px);
+
+    transition:.35s;
+
+    z-index:10000;
+
+}
+
+.toast.show{
+
+    opacity:1;
+
+    transform:translateY(0);
+
+}
+
+.toast.error{
+
+    background:#ef4444;
+
+}
+
+/* Remove number input arrows */
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+}
+
+input[type="number"]{
+    -moz-appearance:textfield;
+}

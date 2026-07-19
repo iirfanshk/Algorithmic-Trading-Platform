@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>📈 Live Market Dashboard</h1>
+
+<form method="GET" action="/market">
+
+<div class="cards">
+
+    <div class="card">
+
+        <h3>Asset Class</h3>
+
+        <select name="asset_class" onchange="this.form.submit()">
+
+            {% for cls in asset_classes %}
+
+            <option value="{{ cls }}"
+            {% if cls == selected_asset_class %}selected{% endif %}>
+                {{ cls }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Asset</h3>
+
+        <select name="ticker" onchange="this.form.submit()">
+
+            {% for ticker in tickers %}
+
+            <option value="{{ ticker }}"
+            {% if ticker == selected_ticker %}selected{% endif %}>
+                {{ ticker }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+</div>
+
+</form>
+
+<br>
+
+<div class="card">
+
+    <h2>{{ company }}</h2>
+
+    <p style="color:gray;">
+        {{ sector }} • {{ industry }}
+    </p>
+
+</div>
+
+<br>
+
+<div class="cards">
+
+    <div class="card">
+
+        <h3>Current Price</h3>
+
+        <h1 style="font-size:38px;">
+            ${{ current_price }}
+        </h1>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Today's Change</h3>
+
+        {% if change_percent >= 0 %}
+
+            <h1 style="color:#00C853;">
+                ▲ {{ change_percent }}%
+            </h1>
+
+        {% else %}
+
+            <h1 style="color:#ff5252;">
+                ▼ {{ change_percent }}%
+            </h1>
+
+        {% endif %}
+
+    </div>
+
+    <div class="card">
+
+        <h3>Volume</h3>
+
+        <h1>
+            {{ "{:,}".format(volume) }}
+        </h1>
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="cards">
+
+    <div class="card">
+
+        <h3>RSI (14)</h3>
+
+        <h1>{{ rsi }}</h1>
+
+    </div>
+
+    <div class="card">
+
+        <h3>EMA 20</h3>
+
+        <h1>{{ ema20 }}</h1>
+
+    </div>
+
+    <div class="card">
+
+        <h3>MACD</h3>
+
+        <h1>{{ macd }}</h1>
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+    <h2>📊 Price Chart</h2>
+
+    {{ chart | safe }}
+
+</div>
+
+<br>
+
+<div class="card">
+
+    <h2>🏢 Company Overview</h2>
+
+    <p style="line-height:1.8; text-align:justify;">
+        {{ summary }}
+    </p>
+
+</div>
+
+{% endblock %}

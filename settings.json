@@ -1,0 +1,8 @@
+{
+    "theme": "Dark",
+    "capital": "10000",
+    "commission": "0.10",
+    "slippage": "0.05",
+    "stoploss": "5",
+    "takeprofit": "10"
+}

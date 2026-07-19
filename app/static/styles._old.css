@@ -1,0 +1,222 @@
+/* ========================= */
+/* GLOBAL */
+/* ========================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*{
+    font-family:'Inter',sans-serif;
+}
+
+#MainMenu,
+header,
+footer{
+    visibility:hidden;
+}
+
+.block-container{
+    max-width:none;
+    padding:0;
+}
+
+/* ========================= */
+/* BACKGROUND */
+/* ========================= */
+
+.stApp{
+
+    background:
+        linear-gradient(
+            rgba(8,12,22,.78),
+            rgba(8,12,22,.78)
+        ),
+        url("app/static/images/login_bg.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+    min-height:100vh;
+
+}
+/* ========================= */
+/* CENTER */
+/* ========================= */
+
+.page{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:100vh;
+}
+
+/* ========================= */
+/* CARD */
+/* ========================= */
+
+.glass-card{
+
+    width:440px;
+
+    padding:46px;
+
+    border-radius:26px;
+
+    background:rgba(18,22,34,.72);
+
+    backdrop-filter:blur(24px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.55);
+
+}
+
+/* ========================= */
+
+.title{
+
+    color:white;
+
+    text-align:center;
+
+    font-size:44px;
+
+    font-weight:700;
+
+    margin-bottom:8px;
+}
+
+.subtitle{
+
+    color:#c4c7d6;
+
+    text-align:center;
+
+    margin-bottom:30px;
+}
+
+/* ========================= */
+/* BUTTONS */
+/* ========================= */
+
+.stButton>button{
+
+    height:52px;
+
+    border-radius:12px;
+
+    border:none;
+
+    font-weight:600;
+}
+
+.stButton:first-of-type button{
+
+    background:#363b68;
+
+    color:white;
+}
+
+.stButton:last-of-type button{
+
+    background:linear-gradient(
+    90deg,
+    #4b8dff,
+    #12d2d9
+    );
+
+    color:white;
+}
+
+/* ========================= */
+/* INPUTS */
+/* ========================= */
+
+.stTextInput input{
+
+    background:#3a3d69 !important;
+
+    color:white !important;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    border-radius:12px;
+
+    height:50px;
+}
+
+.stTextInput label{
+
+    color:white !important;
+
+    font-weight:600;
+}
+
+/* ========================= */
+
+.divider{
+
+    display:flex;
+
+    align-items:center;
+
+    margin:20px 0;
+
+    color:#b7bdd6;
+
+    font-size:12px;
+}
+
+.divider::before,
+.divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:rgba(255,255,255,.12);
+}
+
+.divider span{
+
+    padding:0 14px;
+}
+
+/* ========================= */
+
+.forgot{
+
+    text-align:right;
+
+    color:#8fa7ff;
+
+    font-size:13px;
+
+    margin-top:10px;
+}
+
+/* ========================= */
+
+.bottom-link{
+
+    text-align:center;
+
+    color:#c6cad8;
+
+    margin-top:25px;
+}
+
+.bottom-link b{
+
+    color:white;
+}

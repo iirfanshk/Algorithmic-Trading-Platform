@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="topbar">
+    <h1>🤖 AI Trading Signals</h1>
+    <p>Generate AI-powered trading recommendations using our machine learning engine.</p>
+</div>
+
+<form method="GET" action="/models">
+
+    <div class="cards">
+
+        <div class="card">
+
+            <label>Asset Class</label>
+
+            <select id="asset_class" name="asset_class">
+
+                {% for cls in asset_classes %}
+
+                <option value="{{ cls }}"
+                    {% if cls == selected_asset_class %}selected{% endif %}>
+                    {{ cls }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div class="card">
+
+            <label>Asset</label>
+
+            <select id="asset" name="asset">
+
+                {% for item in assets %}
+
+                <option value="{{ item }}"
+                    {% if item == asset %}selected{% endif %}>
+                    {{ item }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <button id="predictBtn" class="primary-btn" type="submit">
+        🤖 Generate AI Prediction
+    </button>
+
+</form>
+
+<br>
+
+<div class="cards">
+
+    <!-- Prediction -->
+    <div class="card">
+
+        <h3>Prediction</h3>
+
+        {% if signal == "BUY" %}
+
+            <h2 id="prediction">
+                <span style="
+                    background:#16a34a;
+                    color:white;
+                    padding:8px 18px;
+                    border-radius:30px;
+                    display:inline-block;
+                    font-size:24px;">
+                    🟢 BUY
+                </span>
+            </h2>
+
+        {% elif signal == "SELL" %}
+
+            <h2 id="prediction">
+                <span style="
+                    background:#dc2626;
+                    color:white;
+                    padding:8px 18px;
+                    border-radius:30px;
+                    display:inline-block;
+                    font-size:24px;">
+                    🔴 SELL
+                </span>
+            </h2>
+
+        {% else %}
+
+            <h2 id="prediction">
+                <span style="
+                    background:#f59e0b;
+                    color:white;
+                    padding:8px 18px;
+                    border-radius:30px;
+                    display:inline-block;
+                    font-size:24px;">
+                    🟡 HOLD
+                </span>
+            </h2>
+
+        {% endif %}
+
+    </div>
+
+    <!-- Confidence -->
+    <div class="card">
+
+        <h3>Confidence</h3>
+
+        <h2 id="confidence">{{ confidence }}%</h2>
+
+        <br>
+
+        <div style="
+            width:100%;
+            height:10px;
+            background:#0f172a;
+            border-radius:20px;
+            overflow:hidden;">
+
+            <div style="width:{{ confidence }}%;height:100%;background:#2563eb;"></div>
+        </div>
+
+    </div>
+
+    <!-- Risk -->
+
+    <div class="card">
+
+        <h3>Risk</h3>
+
+        {% if risk == "Low" %}
+
+            <h2 style="color:#22c55e;">🟢 Low</h2>
+
+        {% elif risk == "Medium" %}
+
+            <h2 style="color:#f59e0b;">🟠 Medium</h2>
+
+        {% else %}
+
+            <h2 style="color:#ef4444;">🔴 High</h2>
+
+        {% endif %}
+
+    </div>
+
+    <!-- Trend -->
+
+    <div class="card">
+
+        <h3>Trend</h3>
+
+        {% if trend == "Bullish" %}
+
+            <h2 style="color:#22c55e;">📈 Bullish</h2>
+
+        {% elif trend == "Bearish" %}
+
+            <h2 style="color:#ef4444;">📉 Bearish</h2>
+
+        {% else %}
+
+            <h2 style="color:#f59e0b;">➡ Sideways</h2>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="cards">
+
+    <div class="card">
+
+        <h3>Current Price</h3>
+
+        <h2>${{ current_price }}</h2>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Expected Move</h3>
+
+        <h2>{{ expected_move }}%</h2>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Volatility</h3>
+
+        <h2>{{ volatility }}</h2>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Model</h3>
+
+        <h2>XGBoost</h2>
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+    <h2>📈 Price Chart</h2>
+
+    <br>
+
+    {{ chart|safe }}
+
+</div>
+
+<br>
+
+<!-- Suggested Action -->
+
+<div class="card">
+
+    <h2>💡 Suggested Action</h2>
+
+    <br>
+
+    <div style="
+        background:#0f172a;
+        border-left:6px solid #3b82f6;
+        padding:18px;
+        border-radius:10px;">
+
+        <p style="
+            font-size:18px;
+            line-height:1.8;
+            color:#e2e8f0;">
+
+            {{ recommendation }}
+
+        </p>
+
+    </div>
+
+</div>
+
+<br>
+
+<!-- AI Analysis -->
+
+<div class="card">
+
+    <h2>🧠 AI Analysis</h2>
+
+    <br>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+
+        {% for reason in reasons %}
+
+        <div style="
+            background:#0f172a;
+            padding:14px 18px;
+            border-radius:10px;
+            border-left:4px solid #2563eb;">
+
+            ✅ {{ reason }}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<script src="/js/models.js"></script>
+
+{% endblock %}
