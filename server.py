@@ -61,7 +61,10 @@ app = Flask(
     static_url_path=""
 )
 
-app.secret_key = os.getenv("SECRET_KEY")
+app.secret_key = os.getenv(
+    "SECRET_KEY",
+    "algorithmic_trading_secret_key"
+)
 
 oauth = init_google(app)
 
