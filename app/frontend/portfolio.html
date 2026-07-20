@@ -1,244 +1,263 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<h1>💼 Portfolio</h1>
+<!-- ── Page Header ─────────────────────────────────────────── -->
+<div class="topbar">
+  <div class="topbar-left">
+    <h1>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      Portfolio
+    </h1>
+    <p>Manage holdings, track P&amp;L and execute orders</p>
+  </div>
+</div>
 
-<p>
-    Manage your investments and monitor your portfolio performance.
-</p>
+<!-- Portfolio Summary -->
+<div class="hero-card mb-20">
+  <span class="hero-label">Total Portfolio Value</span>
+  <div class="hero-value-row">
+    <span class="hero-value">$100,000</span>
+    <span class="badge positive">+12.45%</span>
+  </div>
+  <div class="hero-sub">As of today · All positions included</div>
+</div>
 
-<br>
+<div class="stat-row mb-20">
 
-<div class="cards">
+  <div class="stat-card">
+    <h3>Total P / L</h3>
+    <h2 class="positive font-mono">+$12,450</h2>
+    <div class="sub">All time</div>
+  </div>
 
-    <div class="card">
-        <h3>Total Portfolio Value</h3>
-        <h1>$100,000</h1>
-    </div>
+  <div class="stat-card">
+    <h3>Today's P / L</h3>
+    <h2 class="positive font-mono">+$845</h2>
+    <div class="sub">Since market open</div>
+  </div>
 
-    <div class="card">
-        <h3>Total Profit / Loss</h3>
-        <h1 style="color:#00C853;">+$12,450</h1>
-    </div>
+  <div class="stat-card">
+    <h3>Cash Balance</h3>
+    <h2 class="font-mono">$24,500</h2>
+    <div class="sub">Available to deploy</div>
+  </div>
 
-    <div class="card">
-        <h3>Today's P/L</h3>
-        <h1 style="color:#00C853;">+$845</h1>
-    </div>
-
-    <div class="card">
-        <h3>Cash Balance</h3>
-        <h1>$24,500</h1>
-    </div>
+  <div class="stat-card">
+    <h3>Invested</h3>
+    <h2 class="font-mono">$75,500</h2>
+    <div class="sub">Across all positions</div>
+  </div>
 
 </div>
 
-<br>
+<!-- Buy Sell -->
+<div class="chart-card mb-20">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Place Order
+  </h2>
 
-<div class="card">
+  <div class="trade-panel" style="background:transparent;border:none;padding:0;">
+    <div class="trade-inputs">
 
-    <h2>➕ Buy / Sell Asset</h2>
+      <div class="input-group">
+        <label>Asset</label>
+        <select id="asset">
+          <option value="AAPL">AAPL — Apple Inc.</option>
+          <option value="MSFT">MSFT — Microsoft</option>
+          <option value="NVDA">NVDA — NVIDIA</option>
+          <option value="GOOGL">GOOGL — Alphabet</option>
+          <option value="AMZN">AMZN — Amazon</option>
+          <option value="META">META — Meta</option>
+          <option value="TSLA">TSLA — Tesla</option>
+          <option value="BTC-USD">BTC-USD — Bitcoin</option>
+          <option value="ETH-USD">ETH-USD — Ethereum</option>
+          <option value="SOL-USD">SOL-USD — Solana</option>
+        </select>
+      </div>
 
-    <br>
+      <div class="input-group">
+        <label>Quantity</label>
+        <input id="quantity" type="number" min="1" step="0.01" placeholder="0.00">
+      </div>
 
-    <div class="cards">
-
-        <div class="card">
-
-            <label for="asset">Asset</label>
-
-            <select id="asset">
-
-                <option value="AAPL">AAPL</option>
-                <option value="MSFT">MSFT</option>
-                <option value="NVDA">NVDA</option>
-                <option value="GOOGL">GOOGL</option>
-                <option value="AMZN">AMZN</option>
-                <option value="META">META</option>
-                <option value="TSLA">TSLA</option>
-                <option value="BTC-USD">BTC-USD</option>
-                <option value="ETH-USD">ETH-USD</option>
-                <option value="SOL-USD">SOL-USD</option>
-
-            </select>
-
-        </div>
-
-        <div class="card">
-
-            <label for="quantity">Quantity</label>
-
-            <input
-                id="quantity"
-                type="number"
-                min="1"
-                step="0.01"
-                placeholder="Enter quantity"
-            >
-
-        </div>
-
-        <div class="card">
-
-            <label for="trade_type">Order Type</label>
-
-            <select id="trade_type">
-
-                <option value="BUY">BUY</option>
-                <option value="SELL">SELL</option>
-
-            </select>
-
-        </div>
+      <div class="input-group">
+        <label>Order Type</label>
+        <select id="trade_type">
+          <option value="BUY">Market Buy</option>
+          <option value="SELL">Market Sell</option>
+        </select>
+      </div>
 
     </div>
 
-    <br>
+    <div class="trade-buttons">
+      <button id="executeTradeBtn" class="primary-btn">
+        Execute
+      </button>
+    </div>
 
-    <button
-        id="executeTradeBtn"
-        class="primary-btn">
+  </div>
+</div>
 
-        Execute Trade
+<!-- Holdings -->
+<div class="chart-card mb-20">
 
-    </button>
+<h2>Current Holdings</h2>
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Asset</th>
+<th>Quantity</th>
+<th>Avg. Buy Price</th>
+<th>Current Price</th>
+<th>Unrealised P/L</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+{% if holdings %}
+
+{% for row in holdings %}
+
+<tr>
+
+<td><span class="ticker-tag">{{ row.asset }}</span></td>
+
+<td class="mono">{{ row.quantity }}</td>
+
+<td class="mono">${{ "%.2f"|format(row.average_price) }}</td>
+
+<td class="mono">
+{% if row.current_price != "-" %}
+${{ "%.2f"|format(row.current_price) }}
+{% else %}
+—
+{% endif %}
+</td>
+
+<td class="mono">
+
+{% if row.unrealized != "-" %}
+
+{% if row.unrealized >= 0 %}
+<span class="positive">
++${{ "%.2f"|format(row.unrealized) }}
+</span>
+{% else %}
+<span class="negative">
+-${{ "%.2f"|format(row.unrealized|abs) }}
+</span>
+{% endif %}
+
+{% else %}
+
+—
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+{% else %}
+
+<tr class="empty-row">
+<td colspan="5">
+No holdings yet.
+</td>
+</tr>
+
+{% endif %}
+
+</tbody>
+
+</table>
 
 </div>
 
-<br>
-
-<div class="card">
-
-    <h2>📊 Current Holdings</h2>
-
-    <br>
-
-    <table class="table">
-
-        <thead>
-
-            <tr>
-
-                <th>Asset</th>
-                <th>Quantity</th>
-                <th>Average Price</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-        {% if holdings %}
-
-            {% for row in holdings %}
-
-            <tr>
-
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <td>${{ "%.2f"|format(row[2]) }}</td>
-
-            </tr>
-
-            {% endfor %}
-
-        {% else %}
-
-            <tr>
-
-                <td colspan="3">
-
-                    No holdings yet.
-
-                </td>
-
-            </tr>
-
-        {% endif %}
-
-        </tbody>
-
-    </table>
-
 </div>
 
-<br>
+<!-- Transactions -->
+<div class="chart-card">
 
-<div class="card">
+<h2>Recent Transactions</h2>
 
-    <h2>📜 Recent Transactions</h2>
+<div class="table-wrap">
 
-    <br>
+<table class="table">
 
-    <table class="table">
+<thead>
 
-        <thead>
+<tr>
+<th>Date & Time</th>
+<th>Asset</th>
+<th>Type</th>
+<th>Quantity</th>
+<th>Price</th>
+<th>Total Value</th>
+</tr>
 
-            <tr>
+</thead>
 
-                <th>Date</th>
-                <th>Asset</th>
-                <th>Type</th>
-                <th>Quantity</th>
-                <th>Price</th>
+<tbody>
 
-            </tr>
+{% if transactions %}
 
-        </thead>
+{% for row in transactions %}
 
-        <tbody>
+<tr>
 
-        {% if transactions %}
+<td>{{ row[0] }}</td>
 
-            {% for row in transactions %}
+<td><span class="ticker-tag">{{ row[1] }}</span></td>
 
-            <tr>
+<td>
 
-                <td>{{ row[0] }}</td>
+{% if row[2]=="BUY" %}
+<span class="signal-buy">▲ BUY</span>
+{% else %}
+<span class="signal-sell">▼ SELL</span>
+{% endif %}
 
-                <td>{{ row[1] }}</td>
+</td>
 
-                <td>
+<td>{{ row[3] }}</td>
 
-                    {% if row[2] == "BUY" %}
+<td>${{ "%.2f"|format(row[4]) }}</td>
 
-                        <span style="color:#00C853;">BUY</span>
+<td>
+${{ "%.2f"|format(row[3]*row[4]) }}
+</td>
 
-                    {% else %}
+</tr>
 
-                        <span style="color:#ff5252;">SELL</span>
+{% endfor %}
 
-                    {% endif %}
+{% else %}
 
-                </td>
+<tr class="empty-row">
+<td colspan="6">
+No transactions found.
+</td>
+</tr>
 
-                <td>{{ row[3] }}</td>
+{% endif %}
 
-                <td>${{ "%.2f"|format(row[4]) }}</td>
+</tbody>
 
-            </tr>
+</table>
 
-            {% endfor %}
-
-        {% else %}
-
-            <tr>
-
-                <td colspan="5">
-
-                    No transactions found.
-
-                </td>
-
-            </tr>
-
-        {% endif %}
-
-        </tbody>
-
-    </table>
+</div>
 
 </div>
 

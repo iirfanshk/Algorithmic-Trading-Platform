@@ -1,56 +1,90 @@
 {% extends "base.html" %}
-
 {% block content %}
 
+<!-- ── Page Header ─────────────────────────────────────────── -->
 <div class="topbar">
-    <h1>📈 Dashboard</h1>
+  <div class="topbar-left">
+    <h1>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </h1>
+    <p>Portfolio overview &amp; performance metrics</p>
+  </div>
+  <div class="topbar-right">
+    <span style="font-size:12px;color:var(--text-muted);">Last updated: <span style="color:var(--green);">Live</span></span>
+  </div>
 </div>
 
-<!-- KPI Cards -->
-<div class="cards">
+<!-- ── Hero Metric ──────────────────────────────────────────── -->
+<div class="hero-card mb-20">
+  <span class="hero-label">Total Portfolio Value</span>
+  <div class="hero-value-row">
+    <span class="hero-value">${{ "{:,.2f}".format(portfolio_value) }}</span>
+    <span class="badge {{ 'positive' if total_return >= 0 else 'negative' }}">
+      {{ '+' if total_return >= 0 else '' }}{{ total_return }}%
+    </span>
+    <span style="font-size:12.5px;color:var(--text-muted);">All time return</span>
+  </div>
+  <div class="hero-sub">Updated in real time &nbsp;·&nbsp; <span style="color:var(--green);">● Market Open</span></div>
+</div>
 
-    <div class="card">
-        <h3>Portfolio Value</h3>
-        <h2>${{ "{:,.2f}".format(portfolio_value) }}</h2>
-    </div>
+<!-- ── Stat Row ─────────────────────────────────────────────── -->
+<div class="stat-row mb-20">
 
-    <div class="card">
-        <h3>Total Return</h3>
-        <h2>{{ total_return }}%</h2>
-    </div>
+  <div class="stat-card">
+    <h3>Total Return</h3>
+    <h2 class="{{ 'positive' if total_return >= 0 else 'negative' }}">
+      {{ '+' if total_return >= 0 else '' }}{{ total_return }}%
+    </h2>
+    <div class="sub">Since inception</div>
+  </div>
 
-    <div class="card">
-        <h3>Sharpe Ratio</h3>
-        <h2>{{ sharpe_ratio }}</h2>
-    </div>
+  <div class="stat-card">
+    <h3>Sharpe Ratio</h3>
+    <h2>{{ sharpe_ratio }}</h2>
+    <div class="sub">Risk-adjusted return</div>
+  </div>
 
-    <div class="card">
-        <h3>Total Trades</h3>
-        <h2>{{ total_trades }}</h2>
-    </div>
+  <div class="stat-card">
+    <h3>Total Trades</h3>
+    <h2>{{ total_trades }}</h2>
+    <div class="sub">Executed orders</div>
+  </div>
+
+  <div class="stat-card">
+    <h3>Win Rate</h3>
+
+    <h2 class="{{ 'positive' if win_rate >= 50 else 'negative' }}">
+        {{ win_rate }}%
+    </h2>
+
+    <div class="sub">Profitable trades</div>
+  </div>
 
 </div>
 
-<br>
-
-<!-- Portfolio Chart -->
-<div class="chart">
-
-    <h2>Portfolio Growth</h2>
-
-    {{ portfolio_chart|safe }}
-
+<!-- ── Portfolio Growth Chart ───────────────────────────────── -->
+<div class="chart-card mb-20">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+    Portfolio Growth
+    <div class="chart-legend">
+      <span><span class="legend-dot" style="background:#2962ff;"></span>Portfolio Value</span>
+    </div>
+  </h2>
+  {{ portfolio_chart | safe }}
 </div>
 
-<br>
-
-<!-- Signal Chart -->
-<div class="chart">
-
-    <h2>Signal Distribution</h2>
-
-    {{ signal_chart|safe }}
-
+<!-- ── Allocation Chart ─────────────────────────────────────── -->
+<div class="chart-card">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Portfolio Allocation
+    <div class="chart-legend">
+      <span style="font-size:12px;color:var(--text-muted);">By asset weight</span>
+    </div>
+  </h2>
+  {{ signal_chart | safe }}
 </div>
 
 {% endblock %}

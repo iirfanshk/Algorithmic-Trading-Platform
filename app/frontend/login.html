@@ -1,106 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Algorithmic Trading Platform</title>
-
-    <link rel="stylesheet" href="/css/style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlgoTrade Pro — Sign In</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
 
 <div class="container">
 
-    <!-- LEFT SIDE -->
-
-    <div class="left">
-
-        <h1>Build, test, trade.</h1>
-
-        <p>
-            Backtest strategies on real market data before
-            risking a single dollar.
-        </p>
-
-        <div class="feature">
-            ✅ Backtesting on historical data
-        </div>
-
-        <div class="feature">
-            ✅ Paper Trading
-        </div>
-
-        <div class="feature">
-            ✅ Portfolio Analytics
-        </div>
-
+  <!-- ── Left Panel ──────────────────────────────────────── -->
+  <div class="left">
+    <div class="brand-mark">
+      <div class="brand-icon">📈</div>
+      <div>
+        <div class="brand-name">AlgoTrade Pro</div>
+        <div class="brand-tag">Algorithmic Trading Platform</div>
+      </div>
     </div>
 
-    <!-- RIGHT SIDE -->
+    <h1>Build, test,<br><span>trade smarter.</span></h1>
 
-    <div class="right">
+    <p>Backtest any strategy on a decade of real market data before risking a single rupee. Deploy with confidence.</p>
 
-        <div class="card">
+    <div class="features-list">
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        Multi-strategy backtesting on historical data
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🤖</div>
+        XGBoost AI signal generation (BUY / SELL / HOLD)
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💹</div>
+        Risk-free paper trading with live prices
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔔</div>
+        Real-time price alerts across asset classes
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💼</div>
+        Portfolio analytics — Sharpe, drawdown, P&amp;L
+      </div>
+    </div>
 
-            <h2>Welcome Back</h2>
+    <div class="login-stats">
+      <div>
+        <div class="login-stat-val">12+</div>
+        <div class="login-stat-lbl">Asset Classes</div>
+      </div>
+      <div>
+        <div class="login-stat-val">4</div>
+        <div class="login-stat-lbl">AI Strategies</div>
+      </div>
+      <div>
+        <div class="login-stat-val">Live</div>
+        <div class="login-stat-lbl">Market Data</div>
+      </div>
+    </div>
+  </div>
 
-            <p class="subtitle">
-                Sign in to your trading desk
-            </p>
+  <!-- ── Right Panel (Form) ──────────────────────────────── -->
+  <div class="right">
+    <div class="card">
 
-            <button class="google-btn">
-                Continue with Google
-            </button>
+      <h2>Welcome back</h2>
+      <p class="subtitle">Sign in to your trading desk</p>
 
-            <div class="divider">
-                <span>OR</span>
-            </div>
+      <a href="/login/google" class="google-btn">
+          Continue with Google
+      </a>
 
-            <input
-                type="text"
-                id="username"
-                placeholder="Username or Email"
-            >
+      <div class="divider"><span>or sign in with email</span></div>
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Password"
-            >
+      <input
+        type="text"
+        id="username"
+        placeholder="Username or email"
+        autocomplete="username"
+      >
 
-            <button
-                id="loginBtn"
-                class="login-btn"
-            >
-                Log In
-            </button>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
 
-            <p class="bottom">
+      <a class="forgot-link" href="/forgot-password">Forgot password?</a>
 
-                Don't have an account?
+      <button id="loginBtn" class="login-btn">Sign In</button>
 
-                <a href="/signup">
-
-                    Create Account
-
-                </a>
-
-            </p>
-
-        </div>
+      <p class="bottom">
+        Don't have an account? <a href="/signup">Create account</a>
+      </p>
 
     </div>
+  </div>
 
 </div>
 
 <script src="/js/app.js"></script>
-
 </body>
-
 </html>

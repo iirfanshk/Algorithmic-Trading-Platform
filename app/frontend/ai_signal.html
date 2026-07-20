@@ -1,295 +1,186 @@
 {% extends "base.html" %}
-
 {% block content %}
 
+<!-- ── Page Header ─────────────────────────────────────────── -->
 <div class="topbar">
-    <h1>🤖 AI Trading Signals</h1>
-    <p>Generate AI-powered trading recommendations using our machine learning engine.</p>
+  <div class="topbar-left">
+    <h1>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      AI Trading Signals
+    </h1>
+    <p>XGBoost ML predictions — generate buy/sell/hold signals for any asset</p>
+  </div>
 </div>
 
+<!-- ── Configuration Bar ───────────────────────────────────── -->
 <form method="GET" action="/models">
-
-    <div class="cards">
-
-        <div class="card">
-
-            <label>Asset Class</label>
-
-            <select id="asset_class" name="asset_class">
-
-                {% for cls in asset_classes %}
-
-                <option value="{{ cls }}"
-                    {% if cls == selected_asset_class %}selected{% endif %}>
-                    {{ cls }}
-                </option>
-
-                {% endfor %}
-
-            </select>
-
-        </div>
-
-        <div class="card">
-
-            <label>Asset</label>
-
-            <select id="asset" name="asset">
-
-                {% for item in assets %}
-
-                <option value="{{ item }}"
-                    {% if item == asset %}selected{% endif %}>
-                    {{ item }}
-                </option>
-
-                {% endfor %}
-
-            </select>
-
-        </div>
-
+  <div class="config-panel mb-20">
+    <div class="config-grid" style="align-items:flex-end;">
+      <div class="input-group">
+        <label>Asset Class</label>
+        <select id="asset_class" name="asset_class">
+          {% for cls in asset_classes %}
+          <option value="{{ cls }}" {% if cls == selected_asset_class %}selected{% endif %}>{{ cls }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Asset</label>
+        <select id="asset" name="asset">
+          {% for item in assets %}
+          <option value="{{ item }}" {% if item == asset %}selected{% endif %}>{{ item }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <button id="predictBtn" class="primary-btn" type="submit">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Generate AI Prediction
+        </button>
+      </div>
     </div>
-
-    <br>
-
-    <button id="predictBtn" class="primary-btn" type="submit">
-        🤖 Generate AI Prediction
-    </button>
-
+  </div>
 </form>
 
-<br>
+<!-- ── Signal Cards Row ─────────────────────────────────────── -->
+<div class="stat-row mb-20">
 
-<div class="cards">
+  <!-- Prediction -->
+  <div class="stat-card">
+    <h3>Prediction</h3>
+    {% if signal == "BUY" %}
+      <div style="margin-top:6px;">
+        <span class="badge buy" style="font-size:18px;padding:8px 24px;letter-spacing:1px;">▲ BUY</span>
+      </div>
+    {% elif signal == "SELL" %}
+      <div style="margin-top:6px;">
+        <span class="badge sell" style="font-size:18px;padding:8px 24px;letter-spacing:1px;">▼ SELL</span>
+      </div>
+    {% else %}
+      <div style="margin-top:6px;">
+        <span class="badge hold" style="font-size:18px;padding:8px 24px;letter-spacing:1px;">● HOLD</span>
+      </div>
+    {% endif %}
+  </div>
 
-    <!-- Prediction -->
-    <div class="card">
-
-        <h3>Prediction</h3>
-
-        {% if signal == "BUY" %}
-
-            <h2 id="prediction">
-                <span style="
-                    background:#16a34a;
-                    color:white;
-                    padding:8px 18px;
-                    border-radius:30px;
-                    display:inline-block;
-                    font-size:24px;">
-                    🟢 BUY
-                </span>
-            </h2>
-
-        {% elif signal == "SELL" %}
-
-            <h2 id="prediction">
-                <span style="
-                    background:#dc2626;
-                    color:white;
-                    padding:8px 18px;
-                    border-radius:30px;
-                    display:inline-block;
-                    font-size:24px;">
-                    🔴 SELL
-                </span>
-            </h2>
-
-        {% else %}
-
-            <h2 id="prediction">
-                <span style="
-                    background:#f59e0b;
-                    color:white;
-                    padding:8px 18px;
-                    border-radius:30px;
-                    display:inline-block;
-                    font-size:24px;">
-                    🟡 HOLD
-                </span>
-            </h2>
-
-        {% endif %}
-
+  <!-- Confidence -->
+  <div class="stat-card">
+    <h3>Confidence</h3>
+    <h2 style="font-size:26px;">{{ confidence }}%</h2>
+    <div class="confidence-bar-wrap">
+      <div class="confidence-bar-fill" style="width:{{ confidence }}%;"></div>
     </div>
+  </div>
 
-    <!-- Confidence -->
-    <div class="card">
+  <!-- Risk -->
+  <div class="stat-card">
+    <h3>Risk Level</h3>
+    {% if risk == "Low" %}
+      <h2 class="positive">Low</h2>
+      <div class="sub"><span class="tag green">●●○○○</span></div>
+    {% elif risk == "Medium" %}
+      <h2 class="neutral">Medium</h2>
+      <div class="sub"><span class="tag yellow">●●●○○</span></div>
+    {% else %}
+      <h2 class="negative">High</h2>
+      <div class="sub"><span class="tag red">●●●●●</span></div>
+    {% endif %}
+  </div>
 
-        <h3>Confidence</h3>
-
-        <h2 id="confidence">{{ confidence }}%</h2>
-
-        <br>
-
-        <div style="
-            width:100%;
-            height:10px;
-            background:#0f172a;
-            border-radius:20px;
-            overflow:hidden;">
-
-            <div style="width:{{ confidence }}%;height:100%;background:#2563eb;"></div>
-        </div>
-
-    </div>
-
-    <!-- Risk -->
-
-    <div class="card">
-
-        <h3>Risk</h3>
-
-        {% if risk == "Low" %}
-
-            <h2 style="color:#22c55e;">🟢 Low</h2>
-
-        {% elif risk == "Medium" %}
-
-            <h2 style="color:#f59e0b;">🟠 Medium</h2>
-
-        {% else %}
-
-            <h2 style="color:#ef4444;">🔴 High</h2>
-
-        {% endif %}
-
-    </div>
-
-    <!-- Trend -->
-
-    <div class="card">
-
-        <h3>Trend</h3>
-
-        {% if trend == "Bullish" %}
-
-            <h2 style="color:#22c55e;">📈 Bullish</h2>
-
-        {% elif trend == "Bearish" %}
-
-            <h2 style="color:#ef4444;">📉 Bearish</h2>
-
-        {% else %}
-
-            <h2 style="color:#f59e0b;">➡ Sideways</h2>
-
-        {% endif %}
-
-    </div>
+  <!-- Trend -->
+  <div class="stat-card">
+    <h3>Market Trend</h3>
+    {% if trend == "Bullish" %}
+      <h2 class="positive">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        Bullish
+      </h2>
+    {% elif trend == "Bearish" %}
+      <h2 class="negative">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>
+        Bearish
+      </h2>
+    {% else %}
+      <h2 class="neutral">→ Sideways</h2>
+    {% endif %}
+  </div>
 
 </div>
 
-<br>
+<!-- ── Price Metrics Row ─────────────────────────────────────── -->
+<div class="stat-row mb-20">
 
-<div class="cards">
+  <div class="stat-card">
+    <h3>Current Price</h3>
+    <h2>${{ current_price }}</h2>
+    <div class="sub font-mono" style="font-size:11px;">Live quote</div>
+  </div>
 
-    <div class="card">
+  <div class="stat-card">
+    <h3>Expected Move</h3>
+    <h2 class="{{ 'positive' if expected_move >= 0 else 'negative' }}">
+      {{ '+' if expected_move >= 0 else '' }}{{ expected_move }}%
+    </h2>
+    <div class="sub">Projected change</div>
+  </div>
 
-        <h3>Current Price</h3>
+  <div class="stat-card">
+    <h3>Volatility</h3>
+    <h2>{{ volatility }}</h2>
+    <div class="sub">30-day annualised</div>
+  </div>
 
-        <h2>${{ current_price }}</h2>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Expected Move</h3>
-
-        <h2>{{ expected_move }}%</h2>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Volatility</h3>
-
-        <h2>{{ volatility }}</h2>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Model</h3>
-
-        <h2>XGBoost</h2>
-
-    </div>
+  <div class="stat-card">
+    <h3>Model</h3>
+    <h2 style="font-size:17px;letter-spacing:0;">XGBoost</h2>
+    <div class="sub"><span class="tag blue">ML Model</span></div>
+  </div>
 
 </div>
 
-<br>
-
-<div class="card">
-
-    <h2>📈 Price Chart</h2>
-
-    <br>
-
-    {{ chart|safe }}
-
+<!-- ── Price Chart ──────────────────────────────────────────── -->
+<div class="chart-card mb-20">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+    Price Chart
+    <div class="chart-legend">
+      <span style="font-size:12px;color:var(--text-muted);">{{ asset }}</span>
+    </div>
+  </h2>
+  {{ chart|safe }}
 </div>
 
-<br>
-
-<!-- Suggested Action -->
-
-<div class="card">
-
-    <h2>💡 Suggested Action</h2>
-
-    <br>
-
-    <div style="
-        background:#0f172a;
-        border-left:6px solid #3b82f6;
-        padding:18px;
-        border-radius:10px;">
-
-        <p style="
-            font-size:18px;
-            line-height:1.8;
-            color:#e2e8f0;">
-
-            {{ recommendation }}
-
-        </p>
-
-    </div>
-
+<!-- ── Suggested Action ─────────────────────────────────────── -->
+<div class="chart-card mb-20">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Suggested Action
+  </h2>
+  <div class="info-panel {{ 'green' if signal == 'BUY' else 'red' if signal == 'SELL' else 'yellow' }}">
+    {{ recommendation }}
+  </div>
 </div>
 
-<br>
-
-<!-- AI Analysis -->
-
-<div class="card">
-
-    <h2>🧠 AI Analysis</h2>
-
-    <br>
-
-    <div style="display:flex;flex-direction:column;gap:12px;">
-
-        {% for reason in reasons %}
-
-        <div style="
-            background:#0f172a;
-            padding:14px 18px;
-            border-radius:10px;
-            border-left:4px solid #2563eb;">
-
-            ✅ {{ reason }}
-
-        </div>
-
-        {% endfor %}
-
+<!-- ── AI Analysis ──────────────────────────────────────────── -->
+<div class="chart-card">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    AI Analysis
+    <div class="chart-legend">
+      <span style="font-size:12px;color:var(--text-muted);">Signal reasoning</span>
     </div>
-
+  </h2>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    {% for reason in reasons %}
+    <div class="analysis-item">
+      <span class="ai-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+      {{ reason }}
+    </div>
+    {% endfor %}
+  </div>
 </div>
 
 <script src="/js/models.js"></script>
-
 {% endblock %}

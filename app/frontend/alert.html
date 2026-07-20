@@ -1,99 +1,113 @@
 {% extends "base.html" %}
-
 {% block content %}
 
+<!-- ── Page Header ─────────────────────────────────────────── -->
 <div class="topbar">
-    <h1>🔔 AI Price Alerts</h1>
-    <p>Create price alerts for any supported asset.</p>
+  <div class="topbar-left">
+    <h1>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Price Alerts
+    </h1>
+    <p>Set price triggers across Stocks, Crypto, Forex &amp; more</p>
+  </div>
 </div>
 
-<div class="card">
+<!-- ── Alert Configuration ──────────────────────────────────── -->
+<div class="config-panel mb-20">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Configure Alert
+  </h2>
 
-    <label>Asset Class</label>
+  <div class="config-grid" style="align-items:flex-end;">
 
-    <select id="asset_class">
-
+    <div class="input-group">
+      <label>Asset Class</label>
+      <select id="asset_class">
         {% for cls in asset_classes %}
-
-        <option value="{{ cls }}"
-            {% if cls == selected_asset_class %}selected{% endif %}>
-
-            {{ cls }}
-
-        </option>
-
+        <option value="{{ cls }}" {% if cls == selected_asset_class %}selected{% endif %}>{{ cls }}</option>
         {% endfor %}
+      </select>
+    </div>
 
-    </select>
-
-    <br><br>
-
-    <label>Asset</label>
-
-    <select id="asset">
-
+    <div class="input-group">
+      <label>Asset</label>
+      <select id="asset">
         {% for item in assets %}
-
-        <option value="{{ item }}">
-
-            {{ item }}
-
-        </option>
-
+        <option value="{{ item }}">{{ item }}</option>
         {% endfor %}
+      </select>
+    </div>
 
-    </select>
+    <div class="input-group">
+      <label>Condition</label>
+      <select id="condition">
+        <option value="Above">
+          ▲ Price Above
+        </option>
+        <option value="Below">
+          ▼ Price Below
+        </option>
+      </select>
+    </div>
 
-    <br><br>
-
-    <label>Condition</label>
-
-    <select id="condition">
-
-        <option value="Above">Above</option>
-
-        <option value="Below">Below</option>
-
-    </select>
-
-    <br><br>
-
-    <label>Target Price</label>
-
-    <input
+    <div class="input-group">
+      <label>Target Price ($)</label>
+      <input
         type="number"
         id="targetPrice"
-        placeholder="Enter target price"
-    >
+        placeholder="e.g. 185.00"
+        step="0.01"
+        min="0"
+      >
+    </div>
 
-    <br><br>
+    <div>
+      <button id="checkAlertBtn" class="primary-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Check Alert
+      </button>
+    </div>
 
-    <button
-        id="checkAlertBtn"
-        class="primary-btn">
-
-        🔔 Check Alert
-
-    </button>
-
+  </div>
 </div>
 
-<br>
+<!-- ── Result ───────────────────────────────────────────────── -->
+<div class="chart-card">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    Alert Result
+  </h2>
+  <div id="alertResult">
+    No alert checked yet. Configure the conditions above and click <strong>Check Alert</strong>.
+  </div>
+</div>
 
-<div class="card">
+<!-- ── Tips ─────────────────────────────────────────────────── -->
+<div class="stat-row" style="margin-top:20px;">
 
-    <h2>Result</h2>
-
-    <br>
-
-    <div id="alertResult">
-
-        No alert checked.
-
+  <div class="stat-card">
+    <h3>How alerts work</h3>
+    <div style="font-size:13px;color:var(--text-secondary);margin-top:6px;line-height:1.7;">
+      Select an asset, set your condition and target price, then click <em>Check Alert</em> to see if the current live price has breached your threshold.
     </div>
+  </div>
+
+  <div class="stat-card">
+    <h3>Supported assets</h3>
+    <div style="font-size:13px;color:var(--text-secondary);margin-top:6px;line-height:1.7;">
+      Stocks · Crypto · Forex · Indices · Commodities. Prices are fetched in real time from market data feeds.
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <h3>Tip</h3>
+    <div style="font-size:13px;color:var(--text-secondary);margin-top:6px;line-height:1.7;">
+      Enable <strong>AI Signal Alerts</strong> in Settings to receive a notification whenever the AI model changes its signal for your watchlist assets.
+    </div>
+  </div>
 
 </div>
 
 <script src="/js/alerts.js"></script>
-
 {% endblock %}

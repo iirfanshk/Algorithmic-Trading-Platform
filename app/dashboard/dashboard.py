@@ -125,3 +125,29 @@ def show_dashboard():
         width="stretch",
         hide_index=True
     )
+    
+import pandas as pd
+import plotly.express as px
+
+
+def portfolio_growth_chart():
+
+    df = pd.read_csv("data/backtest/portfolio_history.csv")
+
+    fig = px.line(
+        df,
+        x="Date",
+        y="Portfolio_Value",
+        title="Portfolio Growth"
+    )
+
+    fig.update_layout(
+        template="plotly_dark",
+        height=450,
+        margin=dict(l=20, r=20, t=40, b=20)
+    )
+
+    return fig.to_html(
+        full_html=False,
+        include_plotlyjs=False
+    )

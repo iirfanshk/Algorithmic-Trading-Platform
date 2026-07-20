@@ -1,70 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Algorithmic Trading Platform</title>
-
-    <link rel="stylesheet" href="/css/dashboard.css">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlgoTrade Pro — Algorithmic Trading Platform</title>
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.plot.ly/plotly-3.7.0.min.js"></script>
 </head>
-
 <body class="{{ 'light-theme' if settings.theme == 'Light' else 'dark-theme' }}">
 
+<!-- ── Sidebar ─────────────────────────────────────────────── -->
 <div class="sidebar">
 
-    <div class="logo">
-
-        📈 AlgoTrade
-
+  <div class="sidebar-logo">
+    <div class="logo-icon">📈</div>
+    <div>
+      <div class="logo-text">AlgoTrade</div>
+      <div class="logo-sub">Pro Platform</div>
     </div>
+  </div>
 
-    <a href="/dashboard">🏠 Dashboard</a>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Main</div>
 
-    <a href="/market">📈 Market</a>
+    <a href="/dashboard" class="{{ 'active' if request.path == '/dashboard' else '' }}">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </span>
+      Dashboard
+    </a>
 
-    <a href="/models">🤖 Predictions</a>
+    <a href="/market" class="{{ 'active' if request.path == '/market' else '' }}">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      </span>
+      Live Market
+    </a>
 
-    <a href="/portfolio">💼 Portfolio</a>
+    <a href="/models" class="{{ 'active' if request.path == '/models' else '' }}">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      </span>
+      AI Signals
+    </a>
 
-    <a href="/alerts">🔔 Alerts</a>
+  </div>
 
-    <a href="/backtesting">📊 Backtesting</a>
+  <div class="sidebar-divider"></div>
 
-    <a href="/paper">💹 Paper Trading</a>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Trading</div>
 
-    <a href="/settings">⚙️ Settings</a>
+    <a href="/portfolio" class="{{ 'active' if request.path == '/portfolio' else '' }}">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      </span>
+      Portfolio
+    </a>
 
-    <a href="/logout">🚪 Logout</a>
+    <a href="/paper" class="{{ 'active' if request.path == '/paper' else '' }}">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </span>
+      Paper Trading
+    </a>
+
+    <a href="/backtesting" class="{{ 'active' if request.path == '/backtesting' else '' }}">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </span>
+      Backtesting
+    </a>
+
+    <a href="/alerts" class="{{ 'active' if request.path == '/alerts' else '' }}">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </span>
+      Price Alerts
+    </a>
+
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Account</div>
+    <a href="/settings" class="{{ 'active' if request.path == '/settings' else '' }}">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </span>
+      Settings
+    </a>
+  </div>
+
+  <div class="sidebar-logout">
+    <a href="/logout">
+      <span class="sidebar-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </span>
+      Logout
+    </a>
+  </div>
 
 </div>
+<!-- ── /Sidebar ─────────────────────────────────────────────── -->
 
 <div class="main">
-
-{% block content %}
-
-{% endblock %}
-
+  {% block content %}{% endblock %}
 </div>
 
 <div id="toast" class="toast"></div>
 
 <div id="loadingOverlay" class="loading-overlay">
-
-    <div class="spinner"></div>
-
-    <p>Loading...</p>
-
+  <div class="spinner"></div>
+  <p>Processing…</p>
 </div>
 
+<script>
+// Shared toast helper
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderLeftColor = type === 'error' ? '#ff3d57' : type === 'warn' ? '#ffab00' : '#00c853';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3800);
+}
+function showLoading(msg) {
+  document.getElementById('loadingOverlay').classList.add('show');
+  document.querySelector('#loadingOverlay p').textContent = msg || 'Processing…';
+}
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('show');
+}
+</script>
 </body>
-
 </html>

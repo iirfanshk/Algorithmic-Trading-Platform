@@ -1,297 +1,171 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<h1>📈 Strategy Backtesting</h1>
+<!-- ── Page Header ─────────────────────────────────────────── -->
+<div class="topbar">
+  <div class="topbar-left">
+    <h1>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Strategy Backtesting
+    </h1>
+    <p>Simulate trading strategies on historical market data — no real money at risk</p>
+  </div>
+</div>
 
-<p>
-Test your trading strategies on historical market data before risking real money.
-</p>
+<!-- ── Configuration Panel ──────────────────────────────────── -->
+<div class="config-panel mb-20">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Backtest Configuration
+  </h2>
 
-<br>
-
-<div class="card">
-
-    <h2>⚙️ Backtesting Configuration</h2>
-
-    <br>
-
-    <div class="cards">
-
-        <div class="card">
-
-            <label>Asset Class</label>
-
-            <select id="asset_class">
-
-                <option>Stocks</option>
-                <option>Crypto</option>
-                <option>Forex</option>
-                <option>Indices</option>
-                <option>Commodities</option>
-
-            </select>
-
-        </div>
-
-        <div class="card">
-
-            <label>Asset</label>
-
-            <select id="asset">
-
-                <option>AAPL</option>
-
-            </select>
-
-        </div>
-
-        <div class="card">
-
-            <label>Strategy</label>
-
-            <select id="strategy">
-
-                <option>Moving Average Crossover</option>
-                <option>RSI Strategy</option>
-                <option>MACD Strategy</option>
-                <option>Bollinger Bands</option>
-
-            </select>
-
-        </div>
-
-        <div class="card">
-
-            <label>Initial Capital ($)</label>
-
-            <input
-                id="capital"
-                type="number"
-                value="10000"
-                min="1000"
-            >
-
-        </div>
-
+  <div class="config-grid">
+    <div class="input-group">
+      <label>Asset Class</label>
+      <select id="asset_class">
+        <option>Stocks</option>
+        <option>Crypto</option>
+        <option>Forex</option>
+        <option>Indices</option>
+        <option>Commodities</option>
+      </select>
     </div>
-
-    <br>
-
-    <div class="cards">
-
-        <div class="card">
-
-            <label>Start Date</label>
-
-            <input
-                id="start_date"
-                type="date"
-            >
-
-        </div>
-
-        <div class="card">
-
-            <label>End Date</label>
-
-            <input
-                id="end_date"
-                type="date"
-            >
-
-        </div>
-
+    <div class="input-group">
+      <label>Asset</label>
+      <select id="asset">
+        <option>AAPL</option>
+      </select>
     </div>
+    <div class="input-group">
+      <label>Strategy</label>
+      <select id="strategy">
+        <option>Moving Average Crossover</option>
+        <option>RSI Strategy</option>
+        <option>MACD Strategy</option>
+        <option>Bollinger Bands</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Initial Capital ($)</label>
+      <input id="capital" type="number" value="10000" min="1000" step="1000">
+    </div>
+  </div>
 
-    <br>
-
-    <button
-        id="runBacktestBtn"
-        class="primary-btn">
-
-        ▶ Run Backtest
-
-    </button>
+  <div class="config-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
+    <div class="input-group">
+      <label>Start Date</label>
+      <input id="start_date" type="date">
+    </div>
+    <div class="input-group">
+      <label>End Date</label>
+      <input id="end_date" type="date">
+    </div>
+    <div style="display:flex;align-items:flex-end;">
+      <button id="runBacktestBtn" class="primary-btn w-full">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Run Backtest
+      </button>
+    </div>
+  </div>
 
 </div>
 
-<br>
+<!-- ── Core Results ──────────────────────────────────────────── -->
+<div class="section-title">Performance Metrics</div>
 
-<div class="cards">
+<div class="stat-row mb-20">
 
-    <div class="card">
+  <div class="stat-card">
+    <h3>Total Return</h3>
+    <h2 id="totalReturn" class="positive">—</h2>
+    <div class="sub">Strategy P&amp;L</div>
+  </div>
 
-        <h3>Total Return</h3>
+  <div class="stat-card">
+    <h3>Sharpe Ratio</h3>
+    <h2 id="sharpeRatio">—</h2>
+    <div class="sub">Risk-adjusted</div>
+  </div>
 
-        <h1
-            id="totalReturn"
-            style="color:#22c55e;">
+  <div class="stat-card">
+    <h3>Max Drawdown</h3>
+    <h2 id="maxDrawdown" class="negative">—</h2>
+    <div class="sub">Peak-to-trough</div>
+  </div>
 
-            --
-
-        </h1>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Sharpe Ratio</h3>
-
-        <h1 id="sharpeRatio">
-
-            --
-
-        </h1>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Max Drawdown</h3>
-
-        <h1
-            id="maxDrawdown"
-            style="color:#ef4444;">
-
-            --
-
-        </h1>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Win Rate</h3>
-
-        <h1
-            id="winRate"
-            style="color:#22c55e;">
-
-            --
-
-        </h1>
-
-    </div>
+  <div class="stat-card">
+    <h3>Win Rate</h3>
+    <h2 id="winRate" class="positive">—</h2>
+    <div class="sub">Profitable trades</div>
+  </div>
 
 </div>
 
-<br>
+<!-- ── AI vs Buy&Hold ───────────────────────────────────────── -->
+<div class="section-title">AI vs Benchmark</div>
 
-<div class="cards">
+<div class="stat-row mb-20">
 
-    <div class="card">
+  <div class="stat-card">
+    <h3>AI Strategy Return</h3>
+    <h2 id="aiReturn" class="positive">—</h2>
+    <div class="sub">ML-driven signals</div>
+  </div>
 
-        <h3>AI Return</h3>
+  <div class="stat-card">
+    <h3>Buy &amp; Hold Return</h3>
+    <h2 id="buyHoldReturn" style="color:#3b82f6;">—</h2>
+    <div class="sub">Passive benchmark</div>
+  </div>
 
-        <h1
-            id="aiReturn"
-            style="color:#22c55e;">
-
-            --
-
-        </h1>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Buy & Hold</h3>
-
-        <h1
-            id="buyHoldReturn"
-            style="color:#3b82f6;">
-
-            --
-
-        </h1>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Outperformance</h3>
-
-        <h1
-            id="outperformance"
-            style="color:#f59e0b;">
-
-            --
-
-        </h1>
-
-    </div>
+  <div class="stat-card">
+    <h3>Alpha (Outperformance)</h3>
+    <h2 id="outperformance" class="neutral">—</h2>
+    <div class="sub">AI vs B&amp;H delta</div>
+  </div>
 
 </div>
 
-<br>
-
-<div class="card">
-
-    <h2>📊 AI Strategy vs Buy & Hold</h2>
-
-    <p style="margin-bottom:15px;color:#94a3b8;">
-        🟢 AI Strategy &nbsp;&nbsp;&nbsp;
-        🔵 Buy & Hold
-    </p>
-
-    <div
-        style="
-            position:relative;
-            width:100%;
-            height:450px;
-        "
-    >
-        <canvas id="equityChart"></canvas>
+<!-- ── Equity Chart ──────────────────────────────────────────── -->
+<div class="chart-card mb-20">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+    AI Strategy vs Buy &amp; Hold
+    <div class="chart-legend">
+      <span><span class="legend-dot" style="background:#00c853;"></span>AI Strategy</span>
+      <span><span class="legend-dot" style="background:#3b82f6;"></span>Buy &amp; Hold</span>
     </div>
-
+  </h2>
+  <div style="position:relative;width:100%;height:420px;">
+    <canvas id="equityChart"></canvas>
+  </div>
 </div>
 
-<br>
-
-<div class="card">
-
-    <h2>📜 Executed Trades</h2>
-
-    <br>
-
+<!-- ── Trade Table ───────────────────────────────────────────── -->
+<div class="chart-card">
+  <h2>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Executed Trades
+  </h2>
+  <div class="table-wrap">
     <table class="table">
-
-        <thead>
-
-            <tr>
-
-                <th>Date</th>
-
-                <th>Signal</th>
-
-                <th>Price</th>
-
-                <th>Portfolio Value</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody id="tradeTable">
-
-            <tr>
-
-                <td colspan="4">
-
-                    No trades executed.
-
-                </td>
-
-            </tr>
-
-        </tbody>
-
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Signal</th>
+          <th>Price</th>
+          <th>Portfolio Value</th>
+        </tr>
+      </thead>
+      <tbody id="tradeTable">
+        <tr class="empty-row">
+          <td colspan="4">Run a backtest to see executed trades</td>
+        </tr>
+      </tbody>
     </table>
-
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/js/backtesting.js"></script>
-
 {% endblock %}

@@ -11,7 +11,16 @@ import yfinance as yf
 from app.auth.login import Login
 from app.auth.register import Register
 
-from app.services.dashboard_service import get_dashboard_data
+
+from app.dashboard.dashboard_service import (
+    portfolio_growth_chart,
+    calculate_sharpe_ratio
+)
+
+from app.paper_trading.paper_service import (
+    portfolio_summary,
+    allocation_chart
+)
 from app.services.market_service import get_market_data
 from app.services.models_service import get_model_prediction
 from app.services.portfolio_service import (
@@ -25,7 +34,9 @@ from app.paper_trading.paper_service import (
     portfolio_summary,
     allocation_chart,
     buy_asset,
-    sell_asset
+    sell_asset,
+    update_portfolio_history,
+    calculate_win_rate
 )
 from app.services.settings_service import (
     save_settings,
@@ -34,6 +45,15 @@ from app.services.settings_service import (
 from app.alerts.alert_service import check_price_alert
 from app.config.assets import ASSETS
 
+import os
+from dotenv import load_dotenv
+
+from app.auth.google_auth import init_google
+from app.auth.database import db
+from flask import url_for
+
+load_dotenv()
+
 app = Flask(
     __name__,
     template_folder="app/frontend",
@@ -41,7 +61,9 @@ app = Flask(
     static_url_path=""
 )
 
-app.secret_key = "algorithmic_trading_secret_key"
+app.secret_key = os.getenv("SECRET_KEY")
+
+oauth = init_google(app)
 
 # =====================================================
 # Global Settings
@@ -83,13 +105,43 @@ def dashboard():
     if "user" not in session:
         return redirect("/")
 
-    dashboard_data = get_dashboard_data()
+    update_portfolio_history()
+
+    portfolio = portfolio_summary()
+    
+    win_rate = calculate_win_rate()
+
+    growth_chart = portfolio_growth_chart()
+
+    print("TYPE:", type(growth_chart))
+    print("FIRST 200 CHARS:")
+    print(growth_chart[:200])
+
+    allocation = allocation_chart()
 
     return render_template(
-        "dashboard.html",
-        **dashboard_data
-    )
 
+        "dashboard.html",
+
+        portfolio_value=portfolio["portfolio_value"],
+
+        cash=portfolio["cash"],
+
+        unrealized=portfolio["unrealized"],
+
+        total_return=portfolio["return_pct"],
+
+        total_trades=len(portfolio["history"]),
+        
+        win_rate=win_rate,
+
+        sharpe_ratio=calculate_sharpe_ratio(),
+
+        portfolio_chart=growth_chart,
+
+        signal_chart=allocation
+
+    )
 
 # =====================================================
 # MARKET
@@ -247,17 +299,28 @@ def paper():
     if "user" not in session:
         return redirect("/")
 
-    chart = allocation_chart()
+    try:
 
-    return render_template(
+        chart = allocation_chart()
 
-        "paper_trading.html",
+        holdings = get_holdings()
 
-        allocation_chart=chart
+        transactions = get_transactions()
 
-    )
+        summary = portfolio_summary()
 
+        return render_template(
+            "paper_trading.html",
+            allocation_chart=chart,
+            holdings=holdings,
+            transactions=transactions,
+            summary=summary
+        )
 
+    except Exception as e:
+
+        print("ERROR:", e)
+        raise
 # =====================================================
 # GET PAPER PORTFOLIO
 # =====================================================
@@ -507,6 +570,78 @@ def api_backtest():
 
     return jsonify(result)
     
+@app.route("/api/live-price/<asset>")
+def live_price(asset):
+
+    try:
+
+        ticker = yf.Ticker(asset)
+
+        history = ticker.history(period="1d")
+
+        if history.empty:
+            return jsonify(success=False)
+
+        price = float(history["Close"].iloc[-1])
+
+        return jsonify(
+            success=True,
+            price=round(price, 2)
+        )
+
+    except Exception as e:
+
+        return jsonify(
+            success=False,
+            message=str(e)
+        )
+        
+# =====================================================
+# GOOGLE LOGIN
+# =====================================================
+
+@app.route("/login/google")
+def login_google():
+    return oauth.google.authorize_redirect(
+        redirect_uri=url_for("google_callback", _external=True)
+    )
+
+
+@app.route("/auth/google/callback")
+def google_callback():
+
+    token = oauth.google.authorize_access_token()
+
+    user = token["userinfo"]
+
+    email = user["email"]
+    name = user["name"]
+
+    existing = db.fetch_one(
+        "SELECT id, username, email FROM users WHERE email=?",
+        (email,)
+    )
+
+    if existing:
+
+        session["user"] = existing[1]
+
+    else:
+
+        username = email.split("@")[0]
+
+        db.execute(
+            """
+            INSERT INTO users(username,email,password)
+            VALUES(?,?,?)
+            """,
+            (username, email, "")
+        )
+
+        session["user"] = username
+
+    return redirect("/dashboard")
+
 # =====================================================
 
 if __name__ == "__main__":

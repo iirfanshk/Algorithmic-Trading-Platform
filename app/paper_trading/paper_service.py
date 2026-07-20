@@ -3,6 +3,8 @@ from pathlib import Path
 import yfinance as yf
 from datetime import datetime
 import plotly.express as px
+import pandas as pd
+
 PORTFOLIO_FILE = Path("paper_portfolio.json")
 
 
@@ -37,6 +39,38 @@ def save_portfolio(data):
     with open(PORTFOLIO_FILE, "w") as f:
 
         json.dump(data, f, indent=4)
+
+
+def update_portfolio_history():
+
+    portfolio = load_portfolio()
+
+    total_value = portfolio["cash"]
+
+    for position in portfolio["positions"]:
+
+        current_price = get_live_price(position["asset"])
+
+        total_value += current_price * position["quantity"]
+
+    folder = Path("data/backtest")
+    folder.mkdir(parents=True, exist_ok=True)
+
+    file_path = folder / "portfolio_history.csv"
+
+    new_row = pd.DataFrame({
+        "Date": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
+        "Portfolio_Value": [round(total_value, 2)]
+    })
+
+    try:
+        history = pd.read_csv(file_path)
+        history = pd.concat([history, new_row], ignore_index=True)
+
+    except FileNotFoundError:
+        history = new_row
+
+    history.to_csv(file_path, index=False)
 
 
 def get_live_price(asset):
@@ -124,6 +158,7 @@ def buy_asset(asset, quantity):
     })
 
     save_portfolio(portfolio)
+    update_portfolio_history()
 
     return {
 
@@ -132,6 +167,7 @@ def buy_asset(asset, quantity):
         "message": f"Bought {quantity} {asset}"
 
     }
+
 
 def sell_asset(asset, quantity):
 
@@ -177,6 +213,7 @@ def sell_asset(asset, quantity):
                 portfolio["positions"].remove(position)
 
             save_portfolio(portfolio)
+            update_portfolio_history()
 
             return {
                 "success": True,
@@ -187,31 +224,44 @@ def sell_asset(asset, quantity):
         "success": False,
         "message": "Asset not found."
     }
+
 def portfolio_summary():
 
     portfolio = load_portfolio()
 
     total_value = portfolio["cash"]
-
-    invested = 0
-
     unrealized = 0
+
+    holdings = []
 
     for position in portfolio["positions"]:
 
         current_price = get_live_price(position["asset"])
 
-        invested += position["buy_price"] * position["quantity"]
+        market_value = current_price * position["quantity"]
 
-        current_value = current_price * position["quantity"]
+        pnl = (
+            current_price - position["buy_price"]
+        ) * position["quantity"]
 
-        total_value += current_value
+        total_value += market_value
+        unrealized += pnl
 
-        unrealized += current_value - (
+        holdings.append({
 
-            position["buy_price"] * position["quantity"]
+            "asset": position["asset"],
 
-        )
+            "quantity": position["quantity"],
+
+            "buy_price": round(position["buy_price"],2),
+
+            "current_price": round(current_price,2),
+
+            "market_value": round(market_value,2),
+
+            "unrealized": round(pnl,2)
+
+        })
 
     total_return = ((total_value - 100000) / 100000) * 100
 
@@ -225,14 +275,14 @@ def portfolio_summary():
 
         "return_pct": round(total_return,2),
 
-        "positions": len(portfolio["positions"]),
+        "positions": len(holdings),
 
-        "holdings": portfolio["positions"],
+        "holdings": holdings,
 
         "history": portfolio["history"]
 
     }
-    
+
 def allocation_chart():
 
     portfolio = load_portfolio()
@@ -240,23 +290,31 @@ def allocation_chart():
     if len(portfolio["positions"]) == 0:
         return None
 
-    allocation = {}
+    labels = []
+    values = []
 
     for position in portfolio["positions"]:
 
-        asset = position["asset"]
+        try:
 
-        price = get_live_price(asset)
+            asset = position["asset"]
 
-        value = price * position["quantity"]
+            price = get_live_price(asset)
 
-        allocation[asset] = allocation.get(asset, 0) + value
+            value = price * position["quantity"]
 
-    labels = list(allocation.keys())
-    values = list(allocation.values())
-    
-    print(labels)
-    print(values)
+            labels.append(asset)
+            values.append(value)
+
+        except Exception as e:
+
+            print(f"Error fetching {asset}: {e}")
+
+    if len(labels) == 0:
+        return None
+
+    print("Labels:", labels)
+    print("Values:", values)
 
     fig = px.pie(
 
@@ -271,12 +329,18 @@ def allocation_chart():
     )
 
     fig.update_traces(
-        textinfo="label+percent"
+
+        textinfo="label+percent",
+
+        textposition="inside"
+
     )
 
     fig.update_layout(
 
         template="plotly_dark",
+
+        height=450,
 
         margin=dict(l=20, r=20, t=40, b=20),
 
@@ -285,6 +349,41 @@ def allocation_chart():
     )
 
     return fig.to_html(
+
         full_html=False,
-        include_plotlyjs="cdn"
+
+        include_plotlyjs=False
+
     )
+    
+def calculate_win_rate():
+
+    portfolio = load_portfolio()
+
+    history = portfolio["history"]
+
+    buy_prices = {}
+
+    wins = 0
+    total = 0
+
+    for trade in history:
+
+        asset = trade["asset"]
+
+        if trade["action"] == "BUY":
+            buy_prices[asset] = trade["price"]
+
+        elif trade["action"] == "SELL" and asset in buy_prices:
+
+            buy_price = buy_prices.pop(asset)
+
+            total += 1
+
+            if trade["price"] > buy_price:
+                wins += 1
+
+    if total == 0:
+        return 0.0
+
+    return round((wins / total) * 100, 2)

@@ -329,6 +329,16 @@ def run_backtest(
         round(buy_hold_shares * float(price), 2)
         for price in df["Close"]
     ]
+    
+    portfolio_history = pd.DataFrame({
+        "Date": df["Date"],
+        "Portfolio_Value": equity_curve
+    })
+
+    portfolio_history.to_csv(
+        "data/backtest/portfolio_history.csv",
+        index=False
+    )
 
     return {
 
