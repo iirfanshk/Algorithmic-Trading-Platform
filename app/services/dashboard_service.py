@@ -5,8 +5,6 @@ def portfolio_growth_chart():
 
     try:
         df = pd.read_csv("data/backtest/portfolio_history.csv")
-        print(df.head())
-        print(df.dtypes)
     except FileNotFoundError:
         return "<h3>No portfolio history available.</h3>"
 
@@ -17,21 +15,21 @@ def portfolio_growth_chart():
         .str.replace(",", "", regex=False)
         .astype(float)
     )
-    print(df["Portfolio_Value"].tolist())
+
     fig = px.line(
         df,
         x="Date",
-        y="Portfolio_Value",
-        title="Portfolio Growth"
+        y="Portfolio_Value"
     )
 
     fig.update_layout(
         template="plotly_dark",
         height=450,
-        margin=dict(l=20, r=20, t=40, b=20)
+        margin=dict(l=20, r=20, t=20, b=20)
     )
 
     return fig.to_html(
         full_html=False,
-        include_plotlyjs=False
+        include_plotlyjs=False,
+        config={"displayModeBar": False}
     )
