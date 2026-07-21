@@ -44,7 +44,7 @@ from app.services.settings_service import (
 )
 from app.alerts.alert_service import check_price_alert
 from app.config.assets import ASSETS
-
+from app.database.portfolio_db import create_tables
 import os
 from dotenv import load_dotenv
 
@@ -65,6 +65,8 @@ app.secret_key = os.getenv(
     "SECRET_KEY",
     "algorithmic_trading_secret_key"
 )
+# Create portfolio tables if they don't exist
+create_tables()
 
 oauth = init_google(app)
 

@@ -10,3 +10,4 @@ yfinance
 plotly
 matplotlib
 gunicorn
+python-dotenv
