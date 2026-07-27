@@ -1,59 +1,55 @@
-# 📈 Algorithmic Trading Platform
+# 📈 AlgoTrade Pro – AI Powered Algorithmic Trading Platform
 
-An end-to-end AI-powered Algorithmic Trading Platform built using **Python**, **Flask**, **Machine Learning**, and **XGBoost**. The platform enables users to analyze markets, generate AI trading signals, backtest strategies, manage a virtual portfolio through paper trading, and monitor portfolio performance using live market data.
+An end-to-end AI-powered algorithmic trading platform built using **Python, Flask, XGBoost, JavaScript, HTML/CSS, SQLite, and Plotly**.
+
+The platform enables users to analyze markets, generate AI trading signals, backtest strategies, manage portfolios, paper trade, and monitor live financial markets—all through a modern web interface.
 
 ---
 
 ## 🚀 Features
 
-### 🔐 Authentication
-- User Login & Registration
-- Secure Session Management
-
-### 📊 Dashboard
-- Portfolio Overview
-- Live Market Summary
-- Interactive Analytics
-
-### 📈 Live Market Data
-- Real-time prices using Yahoo Finance
-- Multiple asset classes:
-  - Stocks
-  - Cryptocurrencies
-  - Indices
-  - Commodities
-  - Forex
-
 ### 🤖 AI Trading Signals
-- XGBoost-based prediction engine
-- BUY / SELL signal generation
-- Confidence Score
-- Risk Level
-- Trend Detection
-- AI Recommendations
+- XGBoost-powered BUY / SELL predictions
+- Confidence score for every prediction
+- Risk assessment
+- Trend analysis
+- Technical indicator based reasoning
+- Supports multiple asset classes
 
-### 📉 Strategy Backtesting
-- Historical Strategy Simulation
-- Performance Summary
+### 📊 Strategy Backtesting
+- Compare AI Strategy vs Buy & Hold
+- Total Return
+- Sharpe Ratio
+- Maximum Drawdown
+- Win Rate
 - Trade History
-- Equity Curve
-- Profit/Loss Analysis
+- Interactive Equity Curve
 
-### 💰 Paper Trading
-- Virtual Portfolio
-- Buy & Sell Orders
-- Live Pricing
-- Portfolio Allocation
-- Trade History
-- Portfolio Analytics
+### 💼 Portfolio Management
+- Track investments
+- Portfolio allocation
+- Profit & Loss analysis
+- Holdings management
 
-### 🔔 Price Alerts
-- Above / Below Price Alerts
-- Live Price Monitoring
+### 📄 Paper Trading
+- Simulate trading without risking real money
+- Virtual portfolio
+- Performance tracking
 
-### ⚙️ Settings
-- User Preferences
-- Configurable Trading Environment
+### 📈 Live Market Dashboard
+- Live market prices
+- Candlestick charts
+- Volatility analysis
+- Expected price movement
+
+### 🌍 Multi Asset Support
+
+- 🇺🇸 US Stocks
+- 🇮🇳 Indian Stocks
+- ₿ Cryptocurrencies
+- 💱 Forex
+- 📊 Global Indices
+- 🛢 Commodities
 
 ---
 
@@ -62,91 +58,86 @@ An end-to-end AI-powered Algorithmic Trading Platform built using **Python**, **
 ### Backend
 - Python
 - Flask
+
+### Machine Learning
 - XGBoost
 - Scikit-learn
+- Joblib
+
+### Data Analysis
 - Pandas
 - NumPy
-- Plotly
-- yFinance
+- TA (Technical Analysis Library)
+
+### Market Data
+- Yahoo Finance API (yfinance)
+
+### Database
+- SQLite
 
 ### Frontend
 - HTML5
 - CSS3
 - JavaScript
 
-### Database
-- SQLite
-
 ### Visualization
 - Plotly
-- Interactive Charts
+- Chart.js
 
 ---
 
 # 📂 Project Structure
 
 ```
-Algorithmic-Trading-Platform
+Algorithmic-Trading-Platform/
 │
-├── app
-│   ├── ai_signals
-│   ├── alerts
-│   ├── analytics
-│   ├── auth
-│   ├── backtesting
-│   ├── dashboard
-│   ├── frontend
-│   ├── ml
-│   ├── paper_trading
-│   ├── portfolio
-│   ├── services
-│   └── strategies
-│
-├── config
-├── data
-├── database
-├── models
+├── app/
+├── config/
+├── data/
+├── database/
+├── models/
+├── screenshots/
+├── tests/
+├── requirements.txt
 ├── server.py
 └── README.md
 ```
 
 ---
 
-## 🔐 Login
+# 📸 Screenshots
 
-![Login](screenshots/login.png)
-
----
-
-## 📊 Dashboard
+## Dashboard
 
 ![Dashboard](screenshots/Dashboard.png)
 
 ---
 
-## 📈 Market
+## AI Signals
 
-![Market](screenshots/market.png)
-
----
-
-## 🤖 AI Signals
-
-![Signals](screenshots/signals.png)
+![AI Signals](screenshots/signals.png)
 
 ---
 
-## 💹 Paper Trading
+## Live Market
 
-![Paper Trading](screenshots/paper_trading.png)
+![Live Market](screenshots/livemarket.png)
 
 ---
 
-## 📉 Backtesting
+## Strategy Backtesting
 
-![Backtesting](screenshots/backtesting.png)
+![Backtesting](screenshots/backtest.png)
 
-# ⚡ Installation
+---
+
+## Paper Trading
+
+![Paper Trading](screenshots/papertrading.png)
+
+---
+
+# ⚙ Installation
 
 Clone the repository
 
@@ -154,19 +145,19 @@ Clone the repository
 git clone https://github.com/iirfanshk/Algorithmic-Trading-Platform.git
 ```
 
-Navigate into the project
+Move into the project
 
 ```bash
 cd Algorithmic-Trading-Platform
 ```
 
-Create Virtual Environment
+Create a virtual environment
 
 ```bash
 python -m venv .venv
 ```
 
-Activate
+Activate it
 
 Windows
 
@@ -177,27 +168,33 @@ Windows
 Install dependencies
 
 ```bash
-pip install -r app/requirements.txt
+pip install -r requirements.txt
 ```
 
-Run
+Run the application
 
 ```bash
 python server.py
 ```
 
+Open
+
+```
+http://127.0.0.1:5000
+```
+
 ---
 
-# 🎯 Future Improvements
+# 📌 Future Improvements
 
-- Google OAuth Login
-- Live Brokerage Integration
-- TradingView Charts
-- Email Notifications
-- Docker Support
-- Cloud Deployment
-- Strategy Marketplace
-- Multi-user Portfolio Tracking
+- Live brokerage integration
+- Reinforcement Learning strategies
+- Portfolio optimization
+- News sentiment analysis
+- Options trading support
+- Multi-user cloud deployment
+- Docker deployment
+- CI/CD pipeline
 
 ---
 
@@ -205,11 +202,12 @@ python server.py
 
 **Shaik Irfan**
 
-Data Science Graduate
-
 GitHub:
 https://github.com/iirfanshk
 
+LinkedIn:
+(Add your LinkedIn profile)
+
 ---
 
-## ⭐ If you found this project useful, consider giving it a star!
+## ⭐ If you like this project, don't forget to star the repository!
