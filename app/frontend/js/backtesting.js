@@ -1,12 +1,60 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const ASSETS = {
 
-    const ASSETS = {
-        Stocks: ["AAPL","MSFT","NVDA","GOOGL","META","AMZN","TSLA"],
-        Crypto: ["BTC-USD","ETH-USD","SOL-USD","BNB-USD","XRP-USD"],
-        Forex: ["EURUSD=X","GBPUSD=X","USDJPY=X","USDINR=X"],
-        Indices: ["^GSPC","^IXIC","^DJI","^NSEI","^NSEBANK"],
-        Commodities: ["GC=F","SI=F","CL=F","NG=F"]
-    };
+    "US Stocks": [
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "GOOGL",
+        "META",
+        "AMZN",
+        "TSLA"
+    ],
+
+    "Indian Stocks": [
+        "RELIANCE.NS",
+        "TCS.NS",
+        "INFY.NS",
+        "HDFCBANK.NS",
+        "ICICIBANK.NS",
+        "SBIN.NS",
+        "LT.NS",
+        "BHARTIARTL.NS",
+        "ITC.NS",
+        "HINDUNILVR.NS"
+    ],
+
+    "Crypto": [
+        "BTC-USD",
+        "ETH-USD",
+        "SOL-USD",
+        "BNB-USD",
+        "XRP-USD"
+    ],
+
+    "Forex": [
+        "EURUSD=X",
+        "GBPUSD=X",
+        "USDJPY=X",
+        "USDINR=X"
+    ],
+
+    "Indices": [
+        "^GSPC",
+        "^IXIC",
+        "^DJI",
+        "^NSEI",
+        "^NSEBANK"
+    ],
+
+    "Commodities": [
+        "GC=F",
+        "SI=F",
+        "CL=F",
+        "NG=F"
+    ]
+
+};
 
     const assetClass = document.getElementById("asset_class");
     const asset = document.getElementById("asset");
@@ -15,17 +63,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         asset.innerHTML = "";
 
-        ASSETS[assetClass.value].forEach(symbol => {
+        const selectedAssets = ASSETS[assetClass.value] || [];
+
+        selectedAssets.forEach(symbol => {
 
             const option = document.createElement("option");
+
             option.value = symbol;
             option.textContent = symbol;
+
             asset.appendChild(option);
 
         });
 
     }
-
     updateAssets();
     assetClass.addEventListener("change", updateAssets);
 

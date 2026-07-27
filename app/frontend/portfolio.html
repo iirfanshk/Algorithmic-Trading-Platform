@@ -1,106 +1,247 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- ── Page Header ─────────────────────────────────────────── -->
+<!-- ───────────────────────────────────────────── -->
+<!-- PAGE HEADER -->
+<!-- ───────────────────────────────────────────── -->
+
 <div class="topbar">
-  <div class="topbar-left">
-    <h1>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-      Portfolio
-    </h1>
-    <p>Manage holdings, track P&amp;L and execute orders</p>
-  </div>
+    <div class="topbar-left">
+        <h1>
+            <svg width="20" height="20"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2"/>
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            </svg>
+
+            Portfolio
+        </h1>
+
+        <p>
+            Live portfolio synced with your Paper Trading account
+        </p>
+    </div>
 </div>
 
-<!-- Portfolio Summary -->
+<!-- ───────────────────────────────────────────── -->
+<!-- HERO CARD -->
+<!-- ───────────────────────────────────────────── -->
+
 <div class="hero-card mb-20">
-  <span class="hero-label">Total Portfolio Value</span>
-  <div class="hero-value-row">
-    <span class="hero-value">$100,000</span>
-    <span class="badge positive">+12.45%</span>
-  </div>
-  <div class="hero-sub">As of today · All positions included</div>
+
+    <span class="hero-label">
+        Total Portfolio Value
+    </span>
+
+    <div class="hero-value-row">
+
+        <span class="hero-value">
+            ${{ "{:,.2f}".format(summary.portfolio_value) }}
+        </span>
+
+        {% if summary.return_pct >= 0 %}
+
+        <span class="badge positive">
+            +{{ "%.2f"|format(summary.return_pct) }}%
+        </span>
+
+        {% else %}
+
+        <span class="badge negative">
+            {{ "%.2f"|format(summary.return_pct) }}%
+        </span>
+
+        {% endif %}
+
+    </div>
+
+    <div class="hero-sub">
+        Synced from Paper Trading Portfolio
+    </div>
+
 </div>
+
+<!-- ───────────────────────────────────────────── -->
+<!-- SUMMARY CARDS -->
+<!-- ───────────────────────────────────────────── -->
 
 <div class="stat-row mb-20">
 
-  <div class="stat-card">
-    <h3>Total P / L</h3>
-    <h2 class="positive font-mono">+$12,450</h2>
-    <div class="sub">All time</div>
-  </div>
+    <!-- Unrealized -->
 
-  <div class="stat-card">
-    <h3>Today's P / L</h3>
-    <h2 class="positive font-mono">+$845</h2>
-    <div class="sub">Since market open</div>
-  </div>
+    <div class="stat-card">
 
-  <div class="stat-card">
-    <h3>Cash Balance</h3>
-    <h2 class="font-mono">$24,500</h2>
-    <div class="sub">Available to deploy</div>
-  </div>
+        <h3>Total Unrealised P/L</h3>
 
-  <div class="stat-card">
-    <h3>Invested</h3>
-    <h2 class="font-mono">$75,500</h2>
-    <div class="sub">Across all positions</div>
-  </div>
+        {% if summary.unrealized >= 0 %}
+
+        <h2 class="positive font-mono">
+            +${{ "{:,.2f}".format(summary.unrealized) }}
+        </h2>
+
+        {% else %}
+
+        <h2 class="negative font-mono">
+            -${{ "{:,.2f}".format(summary.unrealized|abs) }}
+        </h2>
+
+        {% endif %}
+
+        <div class="sub">
+            Open Position Profit
+        </div>
+
+    </div>
+
+    <!-- Positions -->
+
+    <div class="stat-card">
+
+        <h3>Open Positions</h3>
+
+        <h2 class="font-mono">
+            {{ summary.positions }}
+        </h2>
+
+        <div class="sub">
+            Active Holdings
+        </div>
+
+    </div>
+
+    <!-- Cash -->
+
+    <div class="stat-card">
+
+        <h3>Cash Balance</h3>
+
+        <h2 class="font-mono">
+            ${{ "{:,.2f}".format(summary.cash) }}
+        </h2>
+
+        <div class="sub">
+            Available to Trade
+        </div>
+
+    </div>
+
+    <!-- Invested -->
+
+    <div class="stat-card">
+
+        <h3>Invested Capital</h3>
+
+        <h2 class="font-mono">
+            ${{ "{:,.2f}".format(summary.portfolio_value - summary.cash) }}
+        </h2>
+
+        <div class="sub">
+            Current Market Value
+        </div>
+
+    </div>
 
 </div>
 
-<!-- Buy Sell -->
+<!-- ===================================================== -->
+<!-- PLACE ORDER -->
+<!-- ===================================================== -->
+
 <div class="chart-card mb-20">
-  <h2>
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Place Order
-  </h2>
 
-  <div class="trade-panel" style="background:transparent;border:none;padding:0;">
-    <div class="trade-inputs">
+    <h2>
 
-      <div class="input-group">
-        <label>Asset</label>
-        <select id="asset">
-          <option value="AAPL">AAPL — Apple Inc.</option>
-          <option value="MSFT">MSFT — Microsoft</option>
-          <option value="NVDA">NVDA — NVIDIA</option>
-          <option value="GOOGL">GOOGL — Alphabet</option>
-          <option value="AMZN">AMZN — Amazon</option>
-          <option value="META">META — Meta</option>
-          <option value="TSLA">TSLA — Tesla</option>
-          <option value="BTC-USD">BTC-USD — Bitcoin</option>
-          <option value="ETH-USD">ETH-USD — Ethereum</option>
-          <option value="SOL-USD">SOL-USD — Solana</option>
-        </select>
-      </div>
+        <svg width="15"
+             height="15"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
 
-      <div class="input-group">
-        <label>Quantity</label>
-        <input id="quantity" type="number" min="1" step="0.01" placeholder="0.00">
-      </div>
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
 
-      <div class="input-group">
-        <label>Order Type</label>
-        <select id="trade_type">
-          <option value="BUY">Market Buy</option>
-          <option value="SELL">Market Sell</option>
-        </select>
-      </div>
+        </svg>
+
+        Place Order
+
+    </h2>
+
+    <div class="trade-panel"
+         style="background:transparent;border:none;padding:0;">
+
+        <div class="trade-inputs">
+
+            <div class="input-group">
+
+                <label>Asset</label>
+
+                <select id="asset">
+
+                    <option value="AAPL">AAPL — Apple Inc.</option>
+                    <option value="MSFT">MSFT — Microsoft</option>
+                    <option value="NVDA">NVDA — NVIDIA</option>
+                    <option value="GOOGL">GOOGL — Alphabet</option>
+                    <option value="AMZN">AMZN — Amazon</option>
+                    <option value="META">META — Meta</option>
+                    <option value="TSLA">TSLA — Tesla</option>
+                    <option value="BTC-USD">BTC-USD — Bitcoin</option>
+                    <option value="ETH-USD">ETH-USD — Ethereum</option>
+                    <option value="SOL-USD">SOL-USD — Solana</option>
+
+                </select>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Quantity</label>
+
+                <input id="quantity"
+                       type="number"
+                       min="1"
+                       step="1"
+                       placeholder="0">
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Order Type</label>
+
+                <select id="trade_type">
+
+                    <option value="BUY">BUY</option>
+                    <option value="SELL">SELL</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="trade-buttons">
+
+            <button id="executeTradeBtn"
+                    class="primary-btn">
+
+                Execute Trade
+
+            </button>
+
+        </div>
 
     </div>
 
-    <div class="trade-buttons">
-      <button id="executeTradeBtn" class="primary-btn">
-        Execute
-      </button>
-    </div>
-
-  </div>
 </div>
 
-<!-- Holdings -->
+<!-- ===================================================== -->
+<!-- HOLDINGS -->
+<!-- ===================================================== -->
+
 <div class="chart-card mb-20">
 
 <h2>Current Holdings</h2>
@@ -112,54 +253,65 @@
 <thead>
 
 <tr>
+
 <th>Asset</th>
 <th>Quantity</th>
-<th>Avg. Buy Price</th>
+<th>Average Buy</th>
 <th>Current Price</th>
+<th>Market Value</th>
 <th>Unrealised P/L</th>
+
 </tr>
 
 </thead>
 
 <tbody>
 
-{% if holdings %}
+{% if summary.holdings %}
 
-{% for row in holdings %}
+{% for row in summary.holdings %}
 
 <tr>
 
-<td><span class="ticker-tag">{{ row.asset }}</span></td>
-
-<td class="mono">{{ row.quantity }}</td>
-
-<td class="mono">${{ "%.2f"|format(row.average_price) }}</td>
-
-<td class="mono">
-{% if row.current_price != "-" %}
-${{ "%.2f"|format(row.current_price) }}
-{% else %}
-—
-{% endif %}
+<td>
+<span class="ticker-tag">
+{{ row.asset }}
+</span>
 </td>
 
 <td class="mono">
+{{ row.quantity }}
+</td>
 
-{% if row.unrealized != "-" %}
+<td class="mono">
+${{ "%.2f"|format(row.buy_price) }}
+</td>
+
+<td class="mono">
+${{ "%.2f"|format(row.current_price) }}
+</td>
+
+<td class="mono">
+${{ "%.2f"|format(row.market_value) }}
+</td>
+
+<td class="mono">
 
 {% if row.unrealized >= 0 %}
+
 <span class="positive">
+
 +${{ "%.2f"|format(row.unrealized) }}
+
 </span>
+
 {% else %}
+
 <span class="negative">
+
 -${{ "%.2f"|format(row.unrealized|abs) }}
+
 </span>
-{% endif %}
-
-{% else %}
-
-—
 
 {% endif %}
 
@@ -172,9 +324,13 @@ ${{ "%.2f"|format(row.current_price) }}
 {% else %}
 
 <tr class="empty-row">
-<td colspan="5">
-No holdings yet.
+
+<td colspan="6">
+
+No holdings available.
+
 </td>
+
 </tr>
 
 {% endif %}
@@ -187,77 +343,116 @@ No holdings yet.
 
 </div>
 
-<!-- Transactions -->
+<!-- ===================================================== -->
+<!-- TRANSACTION HISTORY -->
+<!-- ===================================================== -->
+
 <div class="chart-card">
 
-<h2>Recent Transactions</h2>
+    <h2>Recent Transactions</h2>
 
-<div class="table-wrap">
+    <div class="table-wrap">
 
-<table class="table">
+        <table class="table">
 
-<thead>
+            <thead>
 
-<tr>
-<th>Date & Time</th>
-<th>Asset</th>
-<th>Type</th>
-<th>Quantity</th>
-<th>Price</th>
-<th>Total Value</th>
-</tr>
+                <tr>
 
-</thead>
+                    <th>Date & Time</th>
+                    <th>Asset</th>
+                    <th>Action</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
 
-<tbody>
+                </tr>
 
-{% if transactions %}
+            </thead>
 
-{% for row in transactions %}
+            <tbody>
 
-<tr>
+            {% if summary.history %}
 
-<td>{{ row[0] }}</td>
+                {% for row in summary.history|reverse %}
 
-<td><span class="ticker-tag">{{ row[1] }}</span></td>
+                <tr>
 
-<td>
+                    <td>{{ row.date }}</td>
 
-{% if row[2]=="BUY" %}
-<span class="signal-buy">▲ BUY</span>
-{% else %}
-<span class="signal-sell">▼ SELL</span>
-{% endif %}
+                    <td>
 
-</td>
+                        <span class="ticker-tag">
 
-<td>{{ row[3] }}</td>
+                            {{ row.asset }}
 
-<td>${{ "%.2f"|format(row[4]) }}</td>
+                        </span>
 
-<td>
-${{ "%.2f"|format(row[3]*row[4]) }}
-</td>
+                    </td>
 
-</tr>
+                    <td>
 
-{% endfor %}
+                        {% if row.action=="BUY" %}
 
-{% else %}
+                        <span class="signal-buy">
 
-<tr class="empty-row">
-<td colspan="6">
-No transactions found.
-</td>
-</tr>
+                            ▲ BUY
 
-{% endif %}
+                        </span>
 
-</tbody>
+                        {% else %}
 
-</table>
+                        <span class="signal-sell">
 
-</div>
+                            ▼ SELL
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="mono">
+
+                        {{ row.quantity }}
+
+                    </td>
+
+                    <td class="mono">
+
+                        ${{ "%.2f"|format(row.price) }}
+
+                    </td>
+
+                    <td class="mono">
+
+                        ${{ "%.2f"|format(row.total) }}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            {% else %}
+
+                <tr class="empty-row">
+
+                    <td colspan="6">
+
+                        No transactions found.
+
+                    </td>
+
+                </tr>
+
+            {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 

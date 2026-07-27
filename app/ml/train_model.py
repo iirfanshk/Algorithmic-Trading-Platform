@@ -3,6 +3,7 @@ from pathlib import Path
 
 import yfinance as yf
 from xgboost import XGBClassifier
+from app.config.assets import ASSETS
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
@@ -153,3 +154,27 @@ def train_model(asset="AAPL"):
     print(f"Model saved -> {save_path}")
 
     return model, metrics
+
+if __name__ == "__main__":
+
+    for asset_class, asset_list in ASSETS.items():
+
+        print(f"\n==============================")
+        print(f"Training {asset_class}")
+        print("==============================")
+
+        for asset in asset_list:
+
+            try:
+
+                print(f"\nTraining {asset}...")
+
+                train_model(asset)
+
+                print(f"✅ {asset} completed.")
+
+            except Exception as e:
+
+                print(f"❌ {asset} failed -> {e}")
+
+    print("\n🎉 All available models trained.")

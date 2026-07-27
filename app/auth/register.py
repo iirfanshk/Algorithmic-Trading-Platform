@@ -22,7 +22,11 @@ class Register:
         # Check username
         existing_user = db.fetch_one(
 
-            "SELECT id FROM users WHERE username=?",
+            """
+            SELECT id
+            FROM users
+            WHERE username=%s
+            """,
 
             (username,)
 
@@ -35,7 +39,11 @@ class Register:
         # Check email
         existing_email = db.fetch_one(
 
-            "SELECT id FROM users WHERE email=?",
+            """
+            SELECT id
+            FROM users
+            WHERE email=%s
+            """,
 
             (email,)
 
@@ -59,19 +67,23 @@ class Register:
 
             """
             INSERT INTO users
-            (username,email,password)
-
-            VALUES (?,?,?)
+            (
+                username,
+                email,
+                password
+            )
+            VALUES
+            (
+                %s,
+                %s,
+                %s
+            )
             """,
 
             (
-
                 username,
-
                 email,
-
                 hashed_password
-
             )
 
         )

@@ -5,39 +5,45 @@ from datetime import datetime
 import plotly.express as px
 import pandas as pd
 
-PORTFOLIO_FILE = Path("paper_portfolio.json")
+from flask import session
+
+PORTFOLIO_DIR = Path("data/portfolios")
+PORTFOLIO_DIR.mkdir(parents=True, exist_ok=True)
+def get_portfolio_file():
+
+    username = session.get("user")
+
+    if not username:
+        raise Exception("User not logged in.")
+
+    return PORTFOLIO_DIR / f"{username}.json"
 
 
 def load_portfolio():
 
-    if PORTFOLIO_FILE.exists():
+    portfolio_file = get_portfolio_file()
 
-        with open(PORTFOLIO_FILE, "r") as f:
+    if portfolio_file.exists():
 
+        with open(portfolio_file, "r") as f:
             portfolio = json.load(f)
 
-        # Add history if an old portfolio file doesn't have it
         if "history" not in portfolio:
             portfolio["history"] = []
 
         return portfolio
 
-    # Create a new portfolio if the file doesn't exist
     return {
-
         "cash": 100000,
-
         "positions": [],
-
         "history": []
-
     }
-
 
 def save_portfolio(data):
 
-    with open(PORTFOLIO_FILE, "w") as f:
+    portfolio_file = get_portfolio_file()
 
+    with open(portfolio_file, "w") as f:
         json.dump(data, f, indent=4)
 
 
@@ -75,14 +81,30 @@ def update_portfolio_history():
 
 def get_live_price(asset):
 
-    data = yf.download(asset, period="1d", progress=False)
+    try:
 
-    close = data["Close"]
+        data = yf.download(
+            asset,
+            period="1d",
+            progress=False,
+            auto_adjust=False
+        )
 
-    if hasattr(close, "columns"):
-        close = close.iloc[:, 0]
+        if data.empty:
+            return 0
 
-    return float(close.iloc[-1])
+        close = data["Close"]
+
+        if hasattr(close, "columns"):
+            close = close.iloc[:, 0]
+
+        return round(float(close.iloc[-1]), 2)
+
+    except Exception as e:
+
+        print("Price Fetch Error:", asset, e)
+
+        return 0
 
 
 def buy_asset(asset, quantity):

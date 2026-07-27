@@ -1,0 +1,41 @@
+{
+    "cash": 33313.54113769531,
+    "positions": [
+        {
+            "asset": "AAPL",
+            "quantity": 4,
+            "buy_price": 333.02
+        },
+        {
+            "asset": "BTC-USD",
+            "quantity": 1,
+            "buy_price": 65354.38
+        }
+    ],
+    "history": [
+        {
+            "date": "27-07-2026 10:58",
+            "asset": "AAPL",
+            "action": "BUY",
+            "quantity": 2,
+            "price": 333.02,
+            "total": 666.04
+        },
+        {
+            "date": "27-07-2026 10:59",
+            "asset": "BTC-USD",
+            "action": "BUY",
+            "quantity": 1,
+            "price": 65354.38,
+            "total": 65354.38
+        },
+        {
+            "date": "27-07-2026 11:00",
+            "asset": "AAPL",
+            "action": "BUY",
+            "quantity": 2,
+            "price": 333.02,
+            "total": 666.04
+        }
+    ]
+}

@@ -1,13 +1,28 @@
 ASSETS = {
 
     "Stocks": [
+
+        # ---------- US Stocks ----------
         "AAPL",
         "MSFT",
         "NVDA",
         "GOOGL",
         "META",
         "AMZN",
-        "TSLA"
+        "TSLA",
+
+        # ---------- Indian Stocks ----------
+        "RELIANCE.NS",
+        "TCS.NS",
+        "INFY.NS",
+        "HDFCBANK.NS",
+        "ICICIBANK.NS",
+        "SBIN.NS",
+        "LT.NS",
+        "BHARTIARTL.NS",
+        "ITC.NS",
+        "HINDUNILVR.NS"
+
     ],
 
     "Crypto": [

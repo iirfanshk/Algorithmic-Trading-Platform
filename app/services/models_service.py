@@ -19,28 +19,25 @@ def get_model_prediction(asset):
         return {
 
             "signal": "N/A",
-
             "confidence": 0,
-
             "risk": "N/A",
-
             "trend": "N/A",
 
             "recommendation":
-                "No trained AI model is available for this asset yet.",
+                f"AI model for {asset} has not been trained yet.",
 
-            "reasons": [
+            "reasons":[
+                "This asset has no trained ML model.",
+                "Live Market, Portfolio and Paper Trading still work.",
+                "Train an XGBoost model for this asset."
+            ],
 
-                "Model has not been trained.",
-
-                "Train an XGBoost model for this asset.",
-
-                "Currently supported assets are those with trained models."
-
-            ]
+            "current_price":0,
+            "expected_move":0,
+            "volatility":0,
+            "chart":""
 
         }
-
     confidence = round(confidence * 100, 2)
     
     # =========================================

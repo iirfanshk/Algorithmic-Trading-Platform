@@ -1,26 +1,8 @@
 import pandas as pd
 from pathlib import Path
 
-INITIAL_CAPITAL = 100000
-
-ASSETS = [
-    "AAPL",
-    "MSFT",
-    "NVDA",
-    "TSLA",
-    "AMZN",
-    "GOOGL",
-    "META",
-    "SPY",
-    "QQQ",
-    "DIA",
-    "BTC-USD",
-    "ETH-USD",
-    "SOL-USD",
-    "GC=F",
-    "SI=F",
-    "CL=F"
-]
+from config.assets import ASSETS
+from config.settings import INITIAL_CAPITAL
 
 
 def get_priority(signal):
@@ -45,64 +27,65 @@ def build_portfolio():
         signal_file = Path(f"data/processed/{asset}/signals.csv")
 
         if not signal_file.exists():
-            print(f"{asset} signals not found.")
+            print(f"{asset}: signals.csv not found.")
             continue
 
         df = pd.read_csv(signal_file)
 
         latest = df.iloc[-1]
 
-        signal = latest["Signal"]
-        score = latest["Score"]
-
-        priority = get_priority(signal)
-
-        confidence = min(abs(score) / 10 * 100, 100)
-
         portfolio.append({
+
             "Asset": asset,
             "Close": latest["Close"],
-            "Signal": signal,
-            "Score": score,
-            "Priority": priority,
-            "Confidence (%)": round(confidence, 2),
+            "Signal": latest["Signal"],
+            "Score": latest["Score"],
+            "Confidence": latest["Confidence"],
+            "Priority": get_priority(latest["Signal"]),
             "RSI": round(latest["RSI_14"], 2),
             "MACD": round(latest["MACD"], 4)
+
         })
 
     portfolio = pd.DataFrame(portfolio)
 
+    if portfolio.empty:
+        print("No assets available.")
+        return
+
     portfolio = portfolio.sort_values(
-        by=["Priority", "Score"],
+        by=["Priority", "Score", "Confidence"],
         ascending=False
     ).reset_index(drop=True)
 
     portfolio["Allocation (%)"] = 0.0
-    portfolio["Capital Allocation"] = 0.0
+    portfolio["Capital"] = 0.0
 
     buy_assets = portfolio[
         portfolio["Signal"].isin(
             ["BUY", "STRONG BUY"]
         )
-    ]
+    ].copy()
 
     if not buy_assets.empty:
 
-        allocation = round(100 / len(buy_assets), 2)
+        total_confidence = buy_assets["Confidence"].sum()
 
-        portfolio.loc[
-            portfolio["Signal"].isin(["BUY", "STRONG BUY"]),
-            "Allocation (%)"
-        ] = allocation
+        for idx in buy_assets.index:
 
-        portfolio.loc[
-            portfolio["Signal"].isin(["BUY", "STRONG BUY"]),
-            "Capital Allocation"
-        ] = (
-            INITIAL_CAPITAL
-            * allocation
-            / 100
-        )
+            allocation = (
+                buy_assets.loc[idx, "Confidence"]
+                / total_confidence
+            ) * 100
+
+            portfolio.loc[idx, "Allocation (%)"] = round(allocation, 2)
+
+            portfolio.loc[idx, "Capital"] = round(
+                allocation
+                / 100
+                * INITIAL_CAPITAL,
+                2
+            )
 
     output_dir = Path("data/portfolio")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -112,14 +95,29 @@ def build_portfolio():
     portfolio.to_csv(output_file, index=False)
 
     print("\n")
-    print("=" * 80)
+    print("=" * 100)
     print("TODAY'S PORTFOLIO")
-    print("=" * 80)
+    print("=" * 100)
     print(portfolio)
+    print("=" * 100)
+
+    print(f"\nSaved : {output_file}")
+
+
+def main():
+
+    print("\n")
+    print("=" * 80)
+    print("BUILDING PORTFOLIO")
     print("=" * 80)
 
-    print(f"\nPortfolio saved to: {output_file}")
+    build_portfolio()
+
+    print("\n")
+    print("=" * 80)
+    print("PORTFOLIO CREATED")
+    print("=" * 80)
 
 
 if __name__ == "__main__":
-    build_portfolio()
+    main()

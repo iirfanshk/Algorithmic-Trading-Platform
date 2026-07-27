@@ -19,6 +19,7 @@ class Login:
     ):
 
         # Search by username or email
+        print("Trying login with:", username_or_email)
         user = db.fetch_one(
 
             """
@@ -30,8 +31,8 @@ class Login:
 
             FROM users
 
-            WHERE username=?
-               OR email=?
+            WHERE username=%s
+                OR email=%s
             """,
 
             (
@@ -42,6 +43,7 @@ class Login:
             )
 
         )
+        print("User fetched:", user)
 
         # User not found
         if user is None:
@@ -74,7 +76,7 @@ class Login:
 
             SET last_login=CURRENT_TIMESTAMP
 
-            WHERE id=?
+            WHERE id=%s
             """,
 
             (user_id,)

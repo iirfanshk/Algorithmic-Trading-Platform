@@ -23,11 +23,7 @@ from app.paper_trading.paper_service import (
 )
 from app.services.market_service import get_market_data
 from app.services.models_service import get_model_prediction
-from app.services.portfolio_service import (
-    execute_trade,
-    get_holdings,
-    get_transactions
-)
+
 from app.services.backtest_service import run_backtest
 
 from app.paper_trading.paper_service import (
@@ -38,6 +34,8 @@ from app.paper_trading.paper_service import (
     update_portfolio_history,
     calculate_win_rate
 )
+
+from app.services.portfolio_service import execute_trade
 from app.services.settings_service import (
     save_settings,
     load_settings
@@ -205,9 +203,19 @@ def models():
         ASSETS[asset_class][0]
     )
 
-    # Prevent invalid asset selection
     if asset not in ASSETS[asset_class]:
         asset = ASSETS[asset_class][0]
+
+    prediction = get_model_prediction(asset)
+
+    return render_template(
+        "ai_signal.html",
+        asset_classes=list(ASSETS.keys()),
+        selected_asset_class=asset_class,
+        assets=ASSETS[asset_class],
+        asset=asset,
+        **prediction
+    )
 
     prediction = get_model_prediction(asset)
 
@@ -230,14 +238,14 @@ def portfolio():
     if "user" not in session:
         return redirect("/")
 
-    holdings = get_holdings()
+    summary = portfolio_summary()
 
-    transactions = get_transactions()
+    allocation = allocation_chart()
 
     return render_template(
         "portfolio.html",
-        holdings=holdings,
-        transactions=transactions
+        summary=summary,
+        allocation=allocation
     )
 
 
@@ -245,13 +253,18 @@ def portfolio():
 # BACKTESTING
 # =====================================================
 
+from app.config.assets import ASSETS
+
 @app.route("/backtesting")
 def backtesting():
 
     if "user" not in session:
         return redirect("/")
 
-    return render_template("backtesting.html")
+    return render_template(
+        "backtesting.html",
+        assets=ASSETS
+    )
 
 # =====================================================
 # SETTINGS PAGE
@@ -308,12 +321,11 @@ def paper():
 
         chart = allocation_chart()
 
-        holdings = get_holdings()
-
-        transactions = get_transactions()
-
         summary = portfolio_summary()
 
+        holdings = summary["holdings"]
+
+        transactions = summary["history"]
         return render_template(
             "paper_trading.html",
             allocation_chart=chart,
@@ -330,10 +342,32 @@ def paper():
 # GET PAPER PORTFOLIO
 # =====================================================
 
+@app.route("/api/trade", methods=["POST"])
+def api_trade():
+
+    if "user" not in session:
+        return jsonify(success=False), 401
+
+    data = request.get_json()
+
+    asset = data["asset"]
+    trade_type = data["trade_type"]
+    quantity = int(data["quantity"])
+
+    if trade_type == "BUY":
+        result = buy_asset(asset, quantity)
+    else:
+        result = sell_asset(asset, quantity)
+
+    return jsonify(result)
+
+
 @app.route("/api/paper", methods=["GET"])
 def api_paper():
 
-    return jsonify(portfolio_summary())
+    summary = portfolio_summary()
+
+    return jsonify(summary)
 
 
 # =====================================================
@@ -485,68 +519,31 @@ def api_alerts():
 @app.route("/api/register", methods=["POST"])
 def api_register():
 
-    data = request.get_json()
-
-    username = data.get("username")
-    email = data.get("email")
-    password = data.get("password")
-
-    register = Register()
-
-    success, message = register.create_user(
-        username,
-        email,
-        password
-    )
-
-    return jsonify(
-        success=success,
-        message=message
-    )
-
-@app.route("/api/trade", methods=["POST"])
-def api_trade():
-
     try:
-
-        if "user" not in session:
-            return jsonify(
-                success=False,
-                message="Unauthorized"
-            ), 401
 
         data = request.get_json()
 
-        asset = data["asset"]
-        trade_type = data["trade_type"]
-        quantity = float(data["quantity"])
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
 
-        ticker = yf.Ticker(asset)
-        history = ticker.history(period="1d")
+        register = Register()
 
-        if history.empty:
-            return jsonify(
-                success=False,
-                message="Unable to fetch live market price."
-            )
-
-        price = float(history["Close"].iloc[-1])
-
-        execute_trade(
-            asset,
-            trade_type,
-            quantity,
-            price
+        success, message = register.create_user(
+            username,
+            email,
+            password
         )
 
         return jsonify(
-            success=True,
-            price=round(price, 2)
+            success=success,
+            message=message
         )
 
     except Exception as e:
 
-        print(e)
+        import traceback
+        traceback.print_exc()
 
         return jsonify(
             success=False,
