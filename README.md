@@ -206,7 +206,7 @@ GitHub:
 https://github.com/iirfanshk
 
 LinkedIn:
-(Add your LinkedIn profile)
+linkedin.com/in/shaik-irfan-79b0ba317
 
 ---
 
