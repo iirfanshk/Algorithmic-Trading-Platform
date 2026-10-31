@@ -32,3 +32,18 @@ paper_portfolio.json
 
 # Pytest
 .pytest_cache/
+
+# --- Vercel deployment additions ---
+
+# SQLite databases (use PostgreSQL on Vercel)
+*.db
+*.sqlite3
+database/users.db
+
+# User portfolio JSON state (ephemeral on Vercel; migrating to PostgreSQL)
+data/portfolios/
+data/backtest/
+data/portfolio/
+
+# Per-user settings file (will be stored in PostgreSQL after migration)
+settings.json
