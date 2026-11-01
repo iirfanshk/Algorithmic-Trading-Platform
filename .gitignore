@@ -47,3 +47,5 @@ data/portfolio/
 
 # Per-user settings file (will be stored in PostgreSQL after migration)
 settings.json
+.vercel
+.env*

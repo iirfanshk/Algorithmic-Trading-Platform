@@ -5,12 +5,12 @@ env/
 __pycache__/
 *.pyc
 
-# Local Data and Training Datasets
-data/
+# Local Data and Training Datasets (root only)
+/data/
 *.csv
 
 # Local Databases and JSON State
-database/
+/database/
 portfolio.db
 paper_portfolio.json
 settings.json
@@ -26,9 +26,8 @@ app/README.md
 # Development / Offline Training Scripts
 train_all_models.py
 app/ml/train_model.py
-tests/
-logs/
+/tests/
+/logs/
 .pytest_cache/
 .vscode/
 .git/
-
