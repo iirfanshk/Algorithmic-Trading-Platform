@@ -63,7 +63,7 @@ def update_portfolio_history():
 
         total_value += current_price * position["quantity"]
 
-    folder = Path("data/backtest")
+    folder = (Path("/tmp") if os.environ.get("VERCEL") else Path(".")) / "data" / "backtest"
     folder.mkdir(parents=True, exist_ok=True)
 
     file_path = folder / "portfolio_history.csv"
