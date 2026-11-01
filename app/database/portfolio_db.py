@@ -1,6 +1,7 @@
+import os
 import sqlite3
 
-DB = "portfolio.db"
+DB = "/tmp/portfolio.db" if os.environ.get("VERCEL") else "portfolio.db"
 
 
 def connect():

@@ -12,62 +12,58 @@ load_dotenv(BASE_DIR / ".env", override=True)
 class Database:
 
     def __init__(self):
+        self.connection = None
+        self.cursor = None
 
-        database_url = os.getenv("DATABASE_URL")
-        print("DATABASE_URL =", database_url)
-
-        if not database_url:
-            raise RuntimeError(
-                f"DATABASE_URL not found in {BASE_DIR / '.env'}"
-            )
-
-        self.connection = psycopg2.connect(database_url)
-        self.cursor = self.connection.cursor()
-
-        self.create_users_table()
+    def get_connection(self):
+        if self.connection is None or getattr(self.connection, "closed", 1) != 0:
+            database_url = os.getenv("DATABASE_URL")
+            if not database_url:
+                raise RuntimeError("DATABASE_URL environment variable is not set.")
+            self.connection = psycopg2.connect(database_url)
+            self.cursor = self.connection.cursor()
+            self.create_users_table()
+        return self.connection
 
     def create_users_table(self):
-
         query = """
         CREATE TABLE IF NOT EXISTS users (
-
             id SERIAL PRIMARY KEY,
-
             username VARCHAR(255) UNIQUE NOT NULL,
-
             email VARCHAR(255) UNIQUE NOT NULL,
-
             password TEXT NOT NULL,
-
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
             last_login TIMESTAMP
-
         );
         """
-
-        self.cursor.execute(query)
-        self.connection.commit()
+        try:
+            self.cursor.execute(query)
+            self.connection.commit()
+        except Exception:
+            if self.connection:
+                self.connection.rollback()
+            raise
 
     def execute(self, query, params=()):
-
+        self.get_connection()
         self.cursor.execute(query, params)
         self.connection.commit()
 
     def fetch_one(self, query, params=()):
-
+        self.get_connection()
         self.cursor.execute(query, params)
         return self.cursor.fetchone()
 
     def fetch_all(self, query, params=()):
-
+        self.get_connection()
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
 
     def close(self):
-
-        self.cursor.close()
-        self.connection.close()
+        if self.cursor:
+            self.cursor.close()
+        if self.connection:
+            self.connection.close()
 
 
 db = Database()

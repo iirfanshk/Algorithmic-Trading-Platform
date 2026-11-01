@@ -1,0 +1,34 @@
+# Local Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Local Data and Training Datasets
+data/
+*.csv
+
+# Local Databases and JSON State
+database/
+portfolio.db
+paper_portfolio.json
+settings.json
+*.db
+*.sqlite3
+
+# Developer Documentation and Images
+screenshots/
+structure.txt
+README.md
+app/README.md
+
+# Development / Offline Training Scripts
+train_all_models.py
+app/ml/train_model.py
+tests/
+logs/
+.pytest_cache/
+.vscode/
+.git/
+

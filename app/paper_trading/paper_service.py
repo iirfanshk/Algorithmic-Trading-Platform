@@ -7,8 +7,12 @@ import pandas as pd
 
 from flask import session
 
-PORTFOLIO_DIR = Path("data/portfolios")
-PORTFOLIO_DIR.mkdir(parents=True, exist_ok=True)
+import os
+PORTFOLIO_DIR = Path("/tmp/data/portfolios") if os.environ.get("VERCEL") else Path("data/portfolios")
+try:
+    PORTFOLIO_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
 def get_portfolio_file():
 
     username = session.get("user")
